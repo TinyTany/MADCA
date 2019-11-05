@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Note\ILongNote.cs" />
+    <Compile Include="Core\Note\INote.cs" />
+    <Compile Include="Core\Note\IStepNote.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
