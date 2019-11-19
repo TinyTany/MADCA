@@ -31,6 +31,9 @@ namespace MADCA.Core.Data
             Size = size;
         }
 
+        public NoteSize(NoteSize other)
+            : this(other.Size) { }
+
         #region IEquatable実装と演算子オーバーロード
         public override bool Equals(object obj)
         {

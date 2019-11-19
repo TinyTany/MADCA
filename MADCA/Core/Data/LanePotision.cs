@@ -8,23 +8,27 @@ namespace MADCA.Core.Data
 {
     public class LanePotision
     {
-        public int Lane { get; private set; }
+        public int RawLane { get; private set; }
 
         public int NormalizedLane
         {
             get
             {
-                if (Lane >= 0)
+                // NOTE: 本家の仕様としてレーン数は60個
+                if (RawLane >= 0)
                 {
-                    return Lane % 60;
+                    return RawLane % 60;
                 }
-                return 60 - (-Lane % 60);
+                return 60 - (-RawLane % 60);
             }
         }
 
         public LanePotision (int lane)
         {
-            Lane = lane;
+            RawLane = lane;
         }
+
+        public LanePotision (LanePotision other)
+            : this(other.RawLane) { }
     }
 }

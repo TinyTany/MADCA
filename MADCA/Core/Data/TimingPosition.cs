@@ -59,6 +59,9 @@ namespace MADCA.Core.Data
             }
         }
 
+        public TimingPosition(TimingPosition other)
+            : this(other.BarIndex, other.DivValue, other.CntValue) { }
+
         #region IEquatable実装と演算子オーバーロード
         public override bool Equals(object obj)
         {
