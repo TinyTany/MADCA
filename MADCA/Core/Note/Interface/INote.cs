@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MADCA.Core.Data;
 
-namespace MADCA.Core.Note
+namespace MADCA.Core.Note.Interface
 {
     public enum NoteType
     {
@@ -22,9 +22,11 @@ namespace MADCA.Core.Note
     }
     public interface INote
     {
-        NoteType NoteType { get; set; }
-        LanePotision Lane { get; set; }
-        TimingPosition Timing { get; set; }
-        NoteSize NoteSize { get; set; }
+        NoteType NoteType { get; }
+        LanePotision Lane { get; }
+        TimingPosition Timing { get; }
+        NoteSize NoteSize { get; }
+        bool ReSize(NoteSize size);
+        bool ReLocate(LanePotision lane, TimingPosition timing);
     }
 }

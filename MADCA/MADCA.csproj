@@ -49,9 +49,21 @@
     <Compile Include="Core\Data\LanePotision.cs" />
     <Compile Include="Core\Data\NoteSize.cs" />
     <Compile Include="Core\Data\TimingPosition.cs" />
-    <Compile Include="Core\Note\ILongNote.cs" />
-    <Compile Include="Core\Note\INote.cs" />
-    <Compile Include="Core\Note\IStepNote.cs" />
+    <Compile Include="Core\Note\Abstract\StepNote.cs" />
+    <Compile Include="Core\Note\Concrete\Chain.cs" />
+    <Compile Include="Core\Note\Concrete\Hold.cs" />
+    <Compile Include="Core\Note\Concrete\HoldBegin.cs" />
+    <Compile Include="Core\Note\Concrete\HoldEnd.cs" />
+    <Compile Include="Core\Note\Concrete\HoldRelay.cs" />
+    <Compile Include="Core\Note\Concrete\SlideL.cs" />
+    <Compile Include="Core\Note\Concrete\SlideR.cs" />
+    <Compile Include="Core\Note\Concrete\SnapD.cs" />
+    <Compile Include="Core\Note\Concrete\SnapU.cs" />
+    <Compile Include="Core\Note\Interface\ILongNote.cs" />
+    <Compile Include="Core\Note\Interface\INote.cs" />
+    <Compile Include="Core\Note\Interface\IStepNote.cs" />
+    <Compile Include="Core\Note\Abstract\Note.cs" />
+    <Compile Include="Core\Note\Concrete\Touch.cs" />
     <Compile Include="UI\GameDisplay.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MADCA.Core.Note
+namespace MADCA.Core.Note.Interface
 {
     public interface IStepNote : INote
     {
