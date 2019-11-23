@@ -4,17 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MADCA.Core.Note.Interface;
+using MADCA.Core.Note.Abstract;
+using MADCA.Core.Data;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class Hold : ILongNote
+    public sealed class Hold// : ILongNote
     {
-        public bool Put(in IStepNote note)
+        private readonly List<HoldStepNote> stepNotes;
+
+        public Hold()
         {
-            throw new NotImplementedException();
+            stepNotes = new List<HoldStepNote>();
         }
 
-        public bool UnPut(in IStepNote note)
+        public bool Put(in HoldStepNote note)
+        {
+            stepNotes.Add(note);
+            note.PositionChanging += (step, lane, timing) =>
+            {
+                switch (step.NoteType)
+                {
+                    case NoteType.HoldBegin:
+                        {
+
+                        }
+                        break;
+                    case NoteType.HoldRelay:
+                        {
+
+                        }
+                        break;
+                    case NoteType.HoldEnd:
+                        {
+
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            };
+            return true;
+        }
+
+        public bool UnPut(in HoldStepNote note)
         {
             throw new NotImplementedException();
         }
