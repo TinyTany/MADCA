@@ -8,7 +8,7 @@ using MADCA.Core.Note.Interface;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class HoldRelay : StepNote
+    public sealed class HoldRelay : HoldStepNote
     {
         public override NoteType NoteType => NoteType.HoldRelay;
     }
