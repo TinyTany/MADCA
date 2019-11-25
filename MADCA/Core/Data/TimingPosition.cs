@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MADCA.Core.Data
 {
-    public class TimingPosition : IEquatable<TimingPosition>
+    public sealed class TimingPosition : IEquatable<TimingPosition>, IComparable<TimingPosition>
     {
         /// <summary>
         /// 小節番号
@@ -62,7 +62,7 @@ namespace MADCA.Core.Data
         public TimingPosition(TimingPosition other)
             : this(other.BarIndex, other.DivValue, other.CntValue) { }
 
-        #region IEquatable実装と演算子オーバーロード
+        #region IEquatable, IComparable実装と演算子オーバーロード
         public override bool Equals(object obj)
         {
             if (obj is null || GetType() != obj.GetType())
@@ -87,6 +87,14 @@ namespace MADCA.Core.Data
             return hashCode;
         }
 
+        public int CompareTo(TimingPosition other)
+        {
+            if (BarIndex != other.BarIndex) { return (other.BarIndex - BarIndex); }
+            if (other.BarRatio < BarRatio) { return -1; }
+            if (other.BarRatio > BarRatio) { return 1; }
+            return 0;
+        }
+
         public static bool operator ==(TimingPosition left, TimingPosition right)
         {
             return left.Equals(right);
@@ -95,6 +103,26 @@ namespace MADCA.Core.Data
         public static bool operator !=(TimingPosition left, TimingPosition right)
         {
             return !(left == right);
+        }
+
+        public static bool operator <(TimingPosition left, TimingPosition right)
+        {
+            return left is null ? right is object : left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(TimingPosition left, TimingPosition right)
+        {
+            return left is null || left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >(TimingPosition left, TimingPosition right)
+        {
+            return left is object && left.CompareTo(right) > 0;
+        }
+
+        public static bool operator >=(TimingPosition left, TimingPosition right)
+        {
+            return left is null ? right is null : left.CompareTo(right) >= 0;
         }
         #endregion
     }
