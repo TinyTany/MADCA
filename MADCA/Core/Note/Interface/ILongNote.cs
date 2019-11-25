@@ -11,9 +11,10 @@ namespace MADCA.Core.Note.Interface
         Unknown,
         Hold
     }
-    public interface ILongNote
+    public interface ILongNote<TStep> 
+        where TStep : IStepNote<TStep>
     {
-        bool Put(in IStepNote note);
-        bool UnPut(in IStepNote note);
+        bool Put(TStep note);
+        bool UnPut(TStep note);
     }
 }
