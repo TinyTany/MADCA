@@ -53,7 +53,6 @@
     <Compile Include="Core\Note\Concrete\Chain.cs" />
     <Compile Include="Core\Note\Concrete\Hold.cs" />
     <Compile Include="Core\Note\Concrete\HoldBegin.cs" />
-    <Compile Include="Core\Note\Concrete\HoldEnd.cs" />
     <Compile Include="Core\Note\Concrete\HoldRelay.cs" />
     <Compile Include="Core\Note\Concrete\SlideL.cs" />
     <Compile Include="Core\Note\Concrete\SlideR.cs" />
