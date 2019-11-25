@@ -18,7 +18,6 @@ namespace MADCA.Core.Note.Abstract
 
         public NoteSize NoteSize { get; private set; }
 
-        public bool ReLocate(LanePotision lane, TimingPosition timing)
         protected Note() { }
 
         protected Note(LanePotision lane, TimingPosition timing, NoteSize size)
@@ -28,6 +27,7 @@ namespace MADCA.Core.Note.Abstract
             NoteSize = new NoteSize(size);
         }
 
+        public virtual bool ReLocate(LanePotision lane, TimingPosition timing)
         {
             Lane = new LanePotision(lane);
             Timing = new TimingPosition(timing);
