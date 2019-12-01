@@ -17,7 +17,8 @@ namespace MADCA.Core.Note.Interface
         SnapU, 
         SnapD, 
         HoldBegin,
-        HoldRelay
+        HoldRelay,
+        HoldEnd
     }
     public interface INote
     {
