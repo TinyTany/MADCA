@@ -67,7 +67,7 @@
     <Compile Include="Core\Note\Concrete\Touch.cs" />
     <Compile Include="Core\Note\NoteBook.cs" />
     <Compile Include="Core\Score\Score.cs" />
-    <Compile Include="UI\GameDisplay.cs" />
+    <Compile Include="UI\GameDisplayBox.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
