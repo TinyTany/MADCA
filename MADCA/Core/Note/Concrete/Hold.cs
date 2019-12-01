@@ -13,12 +13,9 @@ namespace MADCA.Core.Note.Concrete
     {
         private readonly List<HoldStepNote> stepNotes;
         private readonly HoldBegin holdBegin;
+        private readonly HoldEnd holdEnd;
 
-        private Hold()
-        {
-            holdBegin = null;
-            stepNotes = new List<HoldStepNote>();
-        }
+        private Hold() { }
 
         public Hold(LanePotision lane, TimingPosition timingBegin, TimingPosition timingEnd, NoteSize size)
         {
@@ -32,9 +29,16 @@ namespace MADCA.Core.Note.Concrete
                 }
                 return true;
             };
+            holdEnd = new HoldEnd(lane, timingEnd, size);
+            holdEnd.PositionChanging += (end, endLane, endTiming) =>
+            {
+                if (stepNotes.Where(x => x.Timing >= endTiming).Any())
+                {
+                    return false;
+                }
+                return true;
+            };
             stepNotes = new List<HoldStepNote>();
-            var result = Put(new HoldRelay(lane, timingEnd, size));
-            System.Diagnostics.Debug.Assert(result);
         }
 
         public bool Put(HoldStepNote note)
