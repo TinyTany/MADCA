@@ -9,7 +9,7 @@ using MADCA.Core.Note.Interface;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class SlideL : Abstract.Note
+    public sealed class SlideL : ShortNote
     {
         public override NoteType NoteType => NoteType.SlideL;
 

@@ -9,7 +9,7 @@ using MADCA.Core.Note.Interface;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class Touch : Abstract.Note
+    public sealed class Touch : ShortNote
     {
         public override NoteType NoteType => NoteType.Touch;
 

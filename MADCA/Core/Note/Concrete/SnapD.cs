@@ -9,7 +9,7 @@ using MADCA.Core.Note.Interface;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class SnapD : Abstract.Note
+    public sealed class SnapD : ShortNote
     {
         public override NoteType NoteType => NoteType.SnapD;
 

@@ -9,7 +9,7 @@ using MADCA.Core.Note.Interface;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class Chain : Abstract.Note
+    public sealed class Chain : ShortNote
     {
         public override NoteType NoteType => NoteType.Chain;
 
