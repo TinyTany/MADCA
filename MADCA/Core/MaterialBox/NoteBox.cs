@@ -15,10 +15,17 @@ namespace MADCA.Core.MaterialBox
     {
         private NoteBox() { }
 
-        public NoteBox(ShortNote note, RectangleF region)
+        public NoteBox(ShortNote note, RectangleF region, Func<Note.Abstract.Note, RectangleF> regionSetter)
+            : base(note, region) 
         {
-            Note = note;
-            Region = region;
+            note.PositionChanged += (n) =>
+            {
+                Region = regionSetter(n);
+            };
+            note.SizeChanged += (n) =>
+            {
+                Region = regionSetter(n);
+            };
         }
     }
 }

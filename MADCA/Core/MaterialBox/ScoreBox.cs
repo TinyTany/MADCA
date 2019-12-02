@@ -15,10 +15,13 @@ namespace MADCA.Core.MaterialBox
     {
         private ScoreBox() { }
 
-        public ScoreBox(Score.Score score, RectangleF region)
+        public ScoreBox(Score.Score score, RectangleF region, Func<Score.Score, RectangleF> regionSetter)
+            : base(score, region) 
         {
-            Score = score;
-            Region = region;
+            score.Changed += (s) =>
+            {
+                Region = regionSetter(s);
+            };
         }
     }
 }
