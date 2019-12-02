@@ -69,6 +69,8 @@
     <Compile Include="Core\Note\Abstract\Note.cs" />
     <Compile Include="Core\Note\Concrete\Touch.cs" />
     <Compile Include="Core\Note\NoteBook.cs" />
+    <Compile Include="Core\Operation\IOperation.cs" />
+    <Compile Include="Core\Operation\OperationManager.cs" />
     <Compile Include="Core\Score\Score.cs" />
     <Compile Include="Core\Score\ScoreBook.cs" />
     <Compile Include="UI\EditorDisplayBox.cs" />
