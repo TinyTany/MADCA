@@ -50,6 +50,7 @@
     <Compile Include="Core\Data\NoteSize.cs" />
     <Compile Include="Core\Data\TimingPosition.cs" />
     <Compile Include="Core\MaterialBox\NoteBox.cs" />
+    <Compile Include="Core\MaterialBox\RectangleBox.cs" />
     <Compile Include="Core\MaterialBox\ScoreBox.cs" />
     <Compile Include="Core\MusicScore.cs" />
     <Compile Include="Core\Note\Abstract\HoldStepNote.cs" />

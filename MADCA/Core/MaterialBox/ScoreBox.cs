@@ -11,11 +11,8 @@ namespace MADCA.Core.MaterialBox
     /// <summary>
     /// 小節をGUIで操作・表示するためのクラス
     /// </summary>
-    public sealed class ScoreBox
+    public sealed class ScoreBox : RectangleBox<Score.Score>
     {
-        public Score.Score Score { get; private set; }
-        public RectangleF Region { get; private set; }
-
         private ScoreBox() { }
 
         public ScoreBox(Score.Score score, RectangleF region)

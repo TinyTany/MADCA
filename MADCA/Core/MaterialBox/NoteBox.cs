@@ -11,11 +11,8 @@ namespace MADCA.Core.MaterialBox
     /// <summary>
     /// ノーツをGUIで操作・表示するためのクラス
     /// </summary>
-    public sealed class NoteBox
+    public sealed class NoteBox : RectangleBox<ShortNote>
     {
-        public ShortNote Note { get; private set; }
-        public RectangleF Region { get; private set; }
-
         private NoteBox() { }
 
         public NoteBox(ShortNote note, RectangleF region)
