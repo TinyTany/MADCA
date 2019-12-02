@@ -24,7 +24,14 @@ namespace MADCA.Core.Score
 
         public bool RemoveScore(Score score)
         {
-            return scores.Remove(score);
+            var index = scores.IndexOf(score);
+            if (index < 0) { return false; }
+            scores.Remove(score);
+            foreach(var item in scores.Skip(index))
+            {
+                item.OnChanged();
+            }
+            return true;
         }
     }
 }

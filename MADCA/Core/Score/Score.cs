@@ -8,6 +8,7 @@ namespace MADCA.Core.Score
 {
     public sealed class Score
     {
+        public event Action<Score> Changed;
         public int BeatNum { get; private set; }
         public int BeatDen { get; private set; }
 
@@ -23,5 +24,7 @@ namespace MADCA.Core.Score
                 BeatNum = BeatDen = 4;
             }
         }
+
+        public void OnChanged() => Changed?.Invoke(this);
     }
 }

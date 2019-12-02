@@ -10,6 +10,7 @@ namespace MADCA.Core.Note.Abstract
 {
     public abstract class Note : INote
     {
+        public event Action<Note> PositionChanged, SizeChanged;
         public virtual NoteType NoteType => NoteType.Unknown;
 
         public LanePotision Lane { get; private set; }
@@ -31,12 +32,14 @@ namespace MADCA.Core.Note.Abstract
         {
             Lane = new LanePotision(lane);
             Timing = new TimingPosition(timing);
+            PositionChanged?.Invoke(this);
             return true;
         }
 
         public bool ReSize(NoteSize size)
         {
             NoteSize = new NoteSize(size);
+            SizeChanged?.Invoke(this);
             return true;
         }
     }
