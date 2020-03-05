@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace MADCA.Core.Data
 {
+    /// <summary>
+    /// ノーツの時間位置を表現するクラス
+    /// 実際はただの分数を表現するクラス
+    /// </summary>
     public sealed class TimingPosition : IEquatable<TimingPosition>, IComparable<TimingPosition>
     {
         /// <summary>
-        /// 小節番号
-        /// 1スタート
-        /// </summary>
-        public int BarIndex { get; private set; }
-
-        /// <summary>
         /// 小節の分割数
         /// </summary>
-        public int DivValue { get; private set; }
+        public uint DivValue { get; private set; }
 
         /// <summary>
         /// divValueによる分割単位の個数
@@ -26,41 +24,42 @@ namespace MADCA.Core.Data
         public int CntValue { get; private set; }
 
         /// <summary>
-        /// 小節上の位置の比率
-        /// [0, 1)
+        /// 小数で表現した絶対位置
         /// </summary>
         public double BarRatio
         {
             get
             {
-                if (DivValue <= 0 || CntValue < 0)
+                if (DivValue == 0)
                 {
-                    return 0;
+                    // いちいち無限大とかを表現する必要もないので分母が0なら非数ということで...
+                    return double.NaN;
                 }
                 return CntValue / (double)DivValue;
             }
         }
 
-        public TimingPosition(int bar, int div, int cnt)
+        public TimingPosition(uint div, int cnt)
         {
-            BarIndex = bar;
             DivValue = div;
             CntValue = cnt;
-            // NOTE: バリデーションチェック
-            {
-                if (BarIndex <= 0) { BarIndex = 1; }
-                if (DivValue <= 0) { DivValue = 1; }
-                if (CntValue < 0) { CntValue = 0; }
-                if (BarRatio < 0 || 1 <= BarRatio)
-                {
-                    CntValue = 0;
-                    DivValue = 1;
-                }
-            }
+            Normalize();
+            // NOTE:TODO: バリデーションチェックはどうしようか（そもそも必要か？）
         }
 
         public TimingPosition(TimingPosition other)
-            : this(other.BarIndex, other.DivValue, other.CntValue) { }
+            : this(other.DivValue, other.CntValue) { }
+
+        /// <summary>
+        /// 通分
+        /// </summary>
+        private void Normalize()
+        {
+            var gcd = Utility.MyMath.Gcd(DivValue, (uint)CntValue);
+            if (gcd == 0) { return; }
+            DivValue /= gcd;
+            CntValue /= (int)gcd;
+        }
 
         #region IEquatable, IComparable実装と演算子オーバーロード
         public override bool Equals(object obj)
@@ -70,26 +69,23 @@ namespace MADCA.Core.Data
                 return false;
             }
             var other = (TimingPosition)obj;
-            return (BarIndex == other.BarIndex && BarRatio == other.BarRatio);
+            return (BarRatio == other.BarRatio);
         }
 
         public bool Equals(TimingPosition other)
         {
-            return BarIndex == other.BarIndex &&
-                   BarRatio == other.BarRatio;
+            return BarRatio == other.BarRatio;
         }
 
         public override int GetHashCode()
         {
             var hashCode = -845787673;
-            hashCode = hashCode * -1521134295 + BarIndex.GetHashCode();
             hashCode = hashCode * -1521134295 + BarRatio.GetHashCode();
             return hashCode;
         }
 
         public int CompareTo(TimingPosition other)
         {
-            if (BarIndex != other.BarIndex) { return (other.BarIndex - BarIndex); }
             if (other.BarRatio < BarRatio) { return -1; }
             if (other.BarRatio > BarRatio) { return 1; }
             return 0;
