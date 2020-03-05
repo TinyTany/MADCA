@@ -13,7 +13,9 @@ namespace MADCA.Core.Note
         private readonly List<ShortNote> notes;
         private readonly List<Hold> holds;
 
-        // TODO: 外部からノーツのコレクションを取れるようにすることが必要（のはず）
+        // NOTE: 一応外部からノーツたちを見られるようにする（が，リストへの要素追加削除はされたくないという気持ち）
+        public IReadOnlyList<ShortNote> Notes => notes;
+        public IReadOnlyList<Hold> Holds => holds;
 
         public NoteBook()
         {
