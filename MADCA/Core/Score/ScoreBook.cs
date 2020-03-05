@@ -10,6 +10,8 @@ namespace MADCA.Core.Score
     {
         private readonly List<Score> scores;
 
+        public IReadOnlyList<Score> Scores => scores;
+
         public ScoreBook()
         {
             scores = new List<Score>();
