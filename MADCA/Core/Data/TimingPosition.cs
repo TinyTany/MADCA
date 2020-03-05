@@ -39,6 +39,11 @@ namespace MADCA.Core.Data
             }
         }
 
+        /// <summary>
+        /// 有効な値かを調べる（分母が0でないか）
+        /// </summary>
+        public bool IsValid => DivValue != 0;
+
         public TimingPosition(uint div, int cnt)
         {
             DivValue = div;
@@ -61,7 +66,27 @@ namespace MADCA.Core.Data
             CntValue /= (int)gcd;
         }
 
-        #region IEquatable, IComparable実装と演算子オーバーロード
+        #region 加減算オペレーターオーバーロード
+        public static TimingPosition operator+(TimingPosition lhs, TimingPosition rhs)
+        {
+            if (!lhs.IsValid || !rhs.IsValid)
+            {
+                // どっちかがInvalidだったら計算結果はInvalidなものが返る
+                return new TimingPosition(0, 0);
+            }
+            var newDiv = (uint)Utility.MyMath.Lcm((int)lhs.DivValue, (int)rhs.DivValue);
+            var newCnt = (int)(newDiv / lhs.DivValue * lhs.CntValue + newDiv / rhs.DivValue * rhs.CntValue);
+            return new TimingPosition(newDiv, newCnt);
+        }
+
+        public static TimingPosition operator-(TimingPosition lhs, TimingPosition rhs)
+        {
+            rhs.CntValue *= -1;
+            return (lhs + rhs);
+        }
+        #endregion
+
+        #region IEquatable, IComparable実装と比較演算子オーバーロード
         public override bool Equals(object obj)
         {
             if (obj is null || GetType() != obj.GetType())
