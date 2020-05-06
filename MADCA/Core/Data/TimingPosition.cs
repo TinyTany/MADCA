@@ -33,6 +33,7 @@ namespace MADCA.Core.Data
                 if (DivValue == 0)
                 {
                     // いちいち無限大とかを表現する必要もないので分母が0なら非数ということで...
+                    System.Diagnostics.Debug.Assert(false, "分母が0です");
                     return double.NaN;
                 }
                 return CntValue / (double)DivValue;
@@ -81,8 +82,20 @@ namespace MADCA.Core.Data
 
         public static TimingPosition operator-(TimingPosition lhs, TimingPosition rhs)
         {
-            rhs.CntValue *= -1;
-            return (lhs + rhs);
+            return (lhs + new TimingPosition(rhs.DivValue, -rhs.CntValue));
+        }
+
+        public static TimingPosition operator*(TimingPosition lhs, TimingPosition rhs)
+        {
+            var newDiv = lhs.DivValue * rhs.DivValue;
+            var newCnt = lhs.CntValue * rhs.CntValue;
+            return new TimingPosition(newDiv, newCnt);
+        }
+
+        public static TimingPosition operator/(TimingPosition lhs, TimingPosition rhs)
+        {
+            var cnt = rhs.CntValue < 0 ? rhs.DivValue * -1 : rhs.DivValue;
+            return lhs * new TimingPosition((uint)rhs.CntValue, (int)cnt);
         }
         #endregion
 
@@ -111,8 +124,8 @@ namespace MADCA.Core.Data
 
         public int CompareTo(TimingPosition other)
         {
-            if (other.BarRatio < BarRatio) { return -1; }
-            if (other.BarRatio > BarRatio) { return 1; }
+            if (other.BarRatio < BarRatio) { return 1; }
+            if (other.BarRatio > BarRatio) { return -1; }
             return 0;
         }
 
