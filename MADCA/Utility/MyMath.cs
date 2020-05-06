@@ -19,4 +19,19 @@ namespace MADCA.Utility
             return (int)(a / Gcd((uint)a, (uint)b) * b);
         }
     }
+
+    public static class Misc
+    {
+        public static int IndexOf<T>(this IReadOnlyList<T> list, T target)
+            where T : class
+        {
+            int result = -1;
+            foreach(var item in list)
+            {
+                ++result;
+                if (ReferenceEquals(item, target)) { return result; }
+            }
+            return result;
+        }
+    }
 }
