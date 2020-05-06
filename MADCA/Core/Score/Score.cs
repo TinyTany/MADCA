@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MADCA.Core.Data;
 
 namespace MADCA.Core.Score
 {
-    public sealed class Score
+    public interface IReadOnlyScore
+    {
+        uint BeatNum { get; }
+        uint BeatDen { get; }
+        TimingPosition TimingBegin { get; }
+        TimingPosition TimingEnd { get; }
+    }
+
+    public sealed class Score : IReadOnlyScore
     {
         public event Action<Score> Changed;
-        public uint BeatNum { get; private set; }
-        public uint BeatDen { get; private set; }
+        public uint BeatNum { get; set; }
+        public uint BeatDen { get; set; }
+
+        // NOTE: ScoreのTimingの範囲は、[TimingBegin, TimingEnd)
+        public TimingPosition TimingBegin { get; set; }
+        public TimingPosition TimingEnd => TimingBegin + new TimingPosition(BeatDen, (int)BeatNum);
 
         private Score() { }
 
