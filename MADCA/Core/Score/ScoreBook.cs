@@ -10,7 +10,7 @@ namespace MADCA.Core.Score
     {
         private readonly List<Score> scores;
 
-        public IReadOnlyList<Score> Scores => scores;
+        public IReadOnlyList<IReadOnlyScore> Scores => scores;
 
         public ScoreBook()
         {
@@ -20,6 +20,15 @@ namespace MADCA.Core.Score
         public bool AddScoreLast(Score score)
         {
             if (scores.Contains(score)) { return false; }
+            if (!scores.Any())
+            {
+                score.TimingBegin = new Data.TimingPosition(1, 0);
+            }
+            else
+            {
+                var last = scores.Last();
+                score.TimingBegin = last.TimingEnd;
+            }
             scores.Add(score);
             return true;
         }
@@ -32,6 +41,7 @@ namespace MADCA.Core.Score
             foreach(var item in scores.Skip(index))
             {
                 item.OnChanged();
+                item.TimingBegin -= new Data.TimingPosition(score.BeatDen, (int)score.BeatNum);
             }
             return true;
         }
