@@ -60,7 +60,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Data\Environment.cs" />
+    <Compile Include="Core\Data\EditorLaneEnvironment.cs" />
     <Compile Include="Core\Data\LanePotision.cs" />
     <Compile Include="Core\Data\NoteSize.cs" />
     <Compile Include="Core\Data\TimingPosition.cs" />
