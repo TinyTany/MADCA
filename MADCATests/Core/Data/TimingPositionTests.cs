@@ -32,7 +32,16 @@ namespace MADCA.Core.Data.Tests
         [TestMethod()]
         public void EqualsTest1()
         {
-            Assert.Fail();
+            var lhs = new TimingPosition(2, 1);
+            var rhs = new TimingPosition(3, 1);
+            var sum = new TimingPosition(6, 5);
+            Assert.IsTrue(lhs > rhs);
+            Assert.IsTrue(lhs >= rhs);
+            Assert.IsTrue(lhs != rhs);
+            Assert.IsFalse(lhs < rhs);
+            Assert.IsFalse(lhs <= rhs);
+            Assert.IsFalse(lhs == rhs);
+            Assert.IsTrue(lhs + rhs == sum);
         }
 
         [TestMethod()]
