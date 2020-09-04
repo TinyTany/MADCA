@@ -14,13 +14,12 @@ namespace MADCA.Core.Data
         {
             get
             {
-                // NOTE: 本家の仕様としてレーン数は60個
-                // HACK: ハードコーディングしてるけど大丈夫かな
                 if (RawLane >= 0)
                 {
-                    return RawLane % 60;
+                    return RawLane % (int)Environment.LaneCount;
                 }
-                return 60 - (-RawLane % 60);
+                int lc = (int)Environment.LaneCount;
+                return (lc - (-RawLane % lc)) % lc;
             }
         }
 
