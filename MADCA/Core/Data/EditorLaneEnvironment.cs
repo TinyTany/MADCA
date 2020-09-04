@@ -15,6 +15,16 @@ namespace MADCA.Core.Data
         public static uint LaneCount => 60;
     }
 
+    public static class NoteEnvironment
+    {
+        public static int NoteHeight => 5; // 決め打ち
+        
+        public static int NoteWidth(int size, IReadOnlyEditorLaneEnvironment env)
+        {
+            return (int)env.LaneUnitWidth * size;
+        }
+    }
+
     public interface IReadOnlyEditorLaneEnvironment
     {
         /// <summary>
@@ -40,7 +50,7 @@ namespace MADCA.Core.Data
         /// </summary>
         Size PanelSize { get; }
         /// <summary>
-        /// このパネルのオフセット（左上）
+        /// このパネルの描画オフセット（左上）
         /// </summary>
         Point PanelOffset { get; }
         /// <summary>
@@ -50,11 +60,15 @@ namespace MADCA.Core.Data
         uint AvailableLaneWidth { get; }
         uint AvailableLaneHeight { get; }
         /// <summary>
-        /// レーンの左下に対応するX軸方向のオフセット
+        /// レーンの左下に対応するX軸方向のオフセット（正規化された値、絶対実座標、左下原点）
         /// </summary>
         int OffsetX { get; }
         /// <summary>
-        /// レーンの左下に対応するY軸方向のオフセット
+        /// レーンの左下に対応するX軸方向のオフセット（絶対実座標、左下原点）
+        /// </summary>
+        int OffsetXRaw { get; }
+        /// <summary>
+        /// レーンの左下に対応するY軸方向のオフセット（絶対実座標、左下原点）
         /// </summary>
         int OffsetY { get; }
         EditorLaneRegion GetEditorLaneRegion(Point p);
@@ -112,20 +126,22 @@ namespace MADCA.Core.Data
             }
         }
 
-        private int _offsetX;
-        public int OffsetX 
+        public int OffsetX
         {
-            get { return _offsetX; }
-            set
+            get 
             {
-                _offsetX = value;
-                if (_offsetX < 0) 
-                { 
-                    _offsetX = (int)(LaneCount * LaneUnitWidth) - (-_offsetX % (int)(LaneCount * LaneUnitWidth));
+                var raw = OffsetXRaw;
+                if (raw < 0)
+                {
+                    int w = (int)(LaneCount * LaneUnitWidth);
+                    return (w - (-raw % w)) % w;
                 }
-                _offsetX %= (int)(LaneCount * LaneUnitWidth);
+                raw %= (int)(LaneCount * LaneUnitWidth);
+                return raw;
             }
         }
+
+        public int OffsetXRaw { get; set; }
         private int _offsetY;
         public int OffsetY 
         { 
@@ -142,7 +158,7 @@ namespace MADCA.Core.Data
         public EditorLaneEnvironment(Size size)
         {
             PanelSize = size;
-            _offsetX = _offsetY = 0;
+            OffsetXRaw = _offsetY = 0;
         }
 
         public EditorLaneEnvironment(Point p, Size s)
