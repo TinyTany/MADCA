@@ -66,6 +66,7 @@
     <Compile Include="Core\Data\PreviewDisplayEnvironment.cs" />
     <Compile Include="Core\Data\TimingPosition.cs" />
     <Compile Include="Core\Graphics\LaneDrawer.cs" />
+    <Compile Include="Core\Graphics\PreviewDrawer.cs" />
     <Compile Include="Core\MaterialBox\MaterialBook.cs" />
     <Compile Include="Core\MaterialBox\NoteBox.cs" />
     <Compile Include="Core\MaterialBox\RectangleBox.cs" />
