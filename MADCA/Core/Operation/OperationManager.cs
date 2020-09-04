@@ -8,21 +8,21 @@ namespace MADCA.Core.Operation
 {
     public class OperationManager
     {
-        private readonly Stack<IOperation> stackUndo, stackRedo;
+        private readonly Stack<Operation> stackUndo, stackRedo;
 
         public OperationManager()
         {
-            stackUndo = new Stack<IOperation>();
-            stackRedo = new Stack<IOperation>();
+            stackUndo = new Stack<Operation>();
+            stackRedo = new Stack<Operation>();
         }
 
-        public void AddOperation(IOperation op)
+        public void AddOperation(Operation op)
         {
             stackUndo.Push(op);
             stackRedo.Clear();
         }
 
-        public void AddAndInvokeOperation(IOperation op)
+        public void AddAndInvokeOperation(Operation op)
         {
             AddOperation(op);
             op.Invoke();
