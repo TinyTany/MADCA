@@ -18,6 +18,28 @@ namespace MADCA.Utility
         {
             return (int)(a / Gcd((uint)a, (uint)b) * b);
         }
+
+        /// <summary>
+        /// 正剰余を計算します（割られる数が負でもOK）
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float PositiveMod(float p, float q)
+        {
+            return (float)(p - Math.Floor(p / q) * q);
+        }
+
+        /// <summary>
+        /// 正剰余を計算します（割られる数が負でもOK）
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static int PositiveMod(int p, int q)
+        {
+            return (int)(p - Math.Floor(p / (double)q) * q);
+        }
     }
 
     public static class Misc

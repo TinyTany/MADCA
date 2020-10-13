@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using MADCA.Utility;
 
 namespace MADCA.Core.Data
 {
@@ -130,14 +131,7 @@ namespace MADCA.Core.Data
         {
             get 
             {
-                var raw = OffsetXRaw;
-                if (raw < 0)
-                {
-                    int w = (int)(LaneCount * LaneUnitWidth);
-                    return (w - (-raw % w)) % w;
-                }
-                raw %= (int)(LaneCount * LaneUnitWidth);
-                return raw;
+                return MyMath.PositiveMod(OffsetXRaw, (int)(LaneCount * LaneUnitWidth));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MADCA.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,7 @@ namespace MADCA.Core.Data
         {
             get
             {
-                if (RawLane >= 0)
-                {
-                    return RawLane % (int)Environment.LaneCount;
-                }
-                int lc = (int)Environment.LaneCount;
-                return (lc - (-RawLane % lc)) % lc;
+                return MyMath.PositiveMod(RawLane, (int)Environment.LaneCount);
             }
         }
 
