@@ -31,14 +31,12 @@ namespace MADCA.Core.Note.Abstract
         {
             Lane = new LanePotision(lane);
             Timing = new TimingPosition(timing);
-            PositionChanged?.Invoke(this);
             return true;
         }
 
         public bool ReSize(NoteSize size)
         {
             NoteSize = new NoteSize(size);
-            SizeChanged?.Invoke(this);
             return true;
         }
     }
