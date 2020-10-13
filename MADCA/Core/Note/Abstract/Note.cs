@@ -10,7 +10,6 @@ namespace MADCA.Core.Note.Abstract
 {
     public abstract class Note : INote
     {
-        public event Action<Note> PositionChanged, SizeChanged;
         public virtual NoteType NoteType => NoteType.Unknown;
 
         public LanePotision Lane { get; private set; }

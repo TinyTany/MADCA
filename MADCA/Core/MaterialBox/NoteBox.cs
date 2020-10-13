@@ -8,6 +8,8 @@ using System.Drawing;
 
 namespace MADCA.Core.MaterialBox
 {
+    // NOTE: このクラス使わなくない？
+
     /// <summary>
     /// ノーツをGUIで操作・表示するためのクラス
     /// </summary>
@@ -18,6 +20,7 @@ namespace MADCA.Core.MaterialBox
         public NoteBox(ShortNote note, RectangleF region, Func<Note.Abstract.Note, RectangleF> regionSetter)
             : base(note, region) 
         {
+#if false
             note.PositionChanged += (n) =>
             {
                 Region = regionSetter(n);
@@ -26,6 +29,7 @@ namespace MADCA.Core.MaterialBox
             {
                 Region = regionSetter(n);
             };
+#endif
         }
     }
 }
