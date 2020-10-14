@@ -14,6 +14,7 @@ namespace MADCA.Utility
     {
         /// <summary>
         /// 絶対実座標から仮想座標を計算します
+        /// LaneのRangeは(-inf, inf)（RawLaneを計算）
         /// </summary>
         /// <param name="env">エディタレーン環境</param>
         /// <param name="p">実座標（左上原点）</param>
@@ -51,29 +52,35 @@ namespace MADCA.Utility
 
         /// <summary>
         /// 仮想座標から絶対実座標を計算します
+        /// x座標のRangeは(-inf, inf)
         /// </summary>
         /// <param name="env">エディタレーン環境</param>
         /// <param name="position">仮想座標</param>
-        /// <param name="p">計算された実座標（左上原点）</param>
         /// <returns></returns>
-        public static bool ConvertVirtualToReal(IReadOnlyEditorLaneEnvironment env, Position position, out Point p) // TODO: 要検証
-        {
-            var px = (int)(env.SideMargin + position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw);
-            var py = (int)(position.Timing.BarRatio * env.TimingUnitHeight + env.OffsetY);
-            px += env.PanelOffset.X;
-            py = env.PanelSize.Height - py + env.PanelOffset.Y;
-            p = new Point(px, py);
-            return true;
-        }
-
-        public static bool ConvertVirtualToRealNorm(IReadOnlyEditorLaneEnvironment env, Position position, out Point p)
+        public static Point ConvertVirtualToReal(IReadOnlyEditorLaneEnvironment env, Position position)
         {
             var px = (int)(env.SideMargin + position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw);
             var py = (int)(position.Timing.BarRatio * env.TimingUnitHeight - env.OffsetY);
             px += env.PanelOffset.X;
             py = env.PanelSize.Height - py - env.PanelOffset.Y - (int)env.BottomMargin;
-            p = new Point(px, py);
-            return true;
+            return new Point(px, py);
+        }
+
+        /// <summary>
+        /// 仮想座標から実座標を計算します
+        /// x座標のRangeは[0, A)（Aはレーン数×1レーンの幅）
+        /// </summary>
+        /// <param name="env">エディタレーン環境</param>
+        /// <param name="position">仮想座標</param>
+        /// <returns></returns>
+        public static Point ConvertVirtualToRealNorm(IReadOnlyEditorLaneEnvironment env, Position position)
+        {
+            var xtmp = MyMath.PositiveMod(position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw, env.LaneCount * env.LaneUnitWidth);
+            var px = (int)(env.SideMargin + (int)xtmp);
+            var py = (int)(position.Timing.BarRatio * env.TimingUnitHeight - env.OffsetY);
+            px += env.PanelOffset.X;
+            py = env.PanelSize.Height - py - env.PanelOffset.Y - (int)env.BottomMargin;
+            return new Point(px, py);
         }
     }
 }
