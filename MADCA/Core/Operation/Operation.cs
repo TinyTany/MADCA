@@ -17,10 +17,33 @@ namespace MADCA.Core.Operation
     {
         private AddShortNoteOperation() { }
 
-        public AddShortNoteOperation(Note.Abstract.ShortNote shortNote) 
+        public AddShortNoteOperation(NoteBook book, Note.Abstract.ShortNote note) 
         {
-            Invoke = () => { };
-            Undo = () => { };
+            Invoke = () => 
+            {
+                book.PutShortNote(note);
+            };
+            Undo = () =>
+            {
+                book.UnPutShortNote(note);
+            };
+        }
+    }
+
+    public class DeleteShortNoteOperation : Operation
+    {
+        private DeleteShortNoteOperation() { }
+
+        public DeleteShortNoteOperation(NoteBook book, Note.Abstract.ShortNote note)
+        {
+            Invoke = () =>
+            {
+                book.UnPutShortNote(note);
+            };
+            Undo = () =>
+            {
+                book.PutShortNote(note);
+            };
         }
     }
 }
