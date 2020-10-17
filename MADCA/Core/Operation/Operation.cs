@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MADCA.Core.Data;
 using MADCA.Core.Note;
+using MADCA.Core.Note.Abstract;
 
 namespace MADCA.Core.Operation
 {
@@ -23,6 +24,7 @@ namespace MADCA.Core.Operation
             {
                 book.PutShortNote(note);
             };
+
             Undo = () =>
             {
                 book.UnPutShortNote(note);
@@ -40,9 +42,28 @@ namespace MADCA.Core.Operation
             {
                 book.UnPutShortNote(note);
             };
+
             Undo = () =>
             {
                 book.PutShortNote(note);
+            };
+        }
+    }
+
+    public class ReLocateNoteOperation : Operation
+    {
+        private ReLocateNoteOperation() { }
+
+        public ReLocateNoteOperation(NoteBase note, Position before, Position after)
+        {
+            Invoke = () =>
+            {
+                note.ReLocate(after.Lane, after.Timing);
+            };
+
+            Undo = () =>
+            {
+                note.ReLocate(before.Lane, before.Timing);
             };
         }
     }
