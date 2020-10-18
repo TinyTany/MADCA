@@ -15,6 +15,8 @@ namespace MADCA.Core.Note.Concrete
         private readonly HoldBegin holdBegin;
         private readonly HoldEnd holdEnd;
 
+        public IReadOnlyList<HoldStepNote> StepNotes => stepNotes;
+
         private Hold() { }
 
         public Hold(LanePotision lane, TimingPosition timingBegin, TimingPosition timingEnd, NoteSize size)
