@@ -17,7 +17,7 @@ namespace MADCA.Core.MaterialBox
     {
         private NoteBox() { }
 
-        public NoteBox(ShortNote note, RectangleF region, Func<Note.Abstract.Note, RectangleF> regionSetter)
+        public NoteBox(ShortNote note, RectangleF region, Func<Note.Abstract.NoteBase, RectangleF> regionSetter)
             : base(note, region) 
         {
 #if false
