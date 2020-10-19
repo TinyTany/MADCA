@@ -20,14 +20,6 @@ namespace MADCA.Core.Note.Abstract
 
         public NoteSize NoteSize { get; private set; }
 
-        /// <summary>
-        /// 物理的当たり判定（画面上の絶対実座標位置と大きさ）
-        /// </summary>
-        public Rectangle Region { get; private set; }
-
-        // TODO: ノーツの位置や大きさが変わったときにRegionにそれが反映されるようにする
-        // NOTE: GetRectangleメソッドに全部任せてしまうのもアリ？（どのくらいパフォーマンスに違いがあるのだろうか？）
-
         protected NoteBase() { }
 
         protected NoteBase(LanePotision lane, TimingPosition timing, NoteSize size)
