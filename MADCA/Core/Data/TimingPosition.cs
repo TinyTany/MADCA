@@ -107,12 +107,12 @@ namespace MADCA.Core.Data
                 return false;
             }
             var other = (TimingPosition)obj;
-            return (BarRatio == other.BarRatio);
+            return Equals(other);
         }
 
         public bool Equals(TimingPosition other)
         {
-            return BarRatio == other.BarRatio;
+            return CntValue * other.DivValue == other.CntValue * DivValue;
         }
 
         public override int GetHashCode()
