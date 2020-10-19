@@ -20,7 +20,10 @@ namespace MADCA.Core.Note.Abstract
         public override bool ReLocate(LanePotision lane, TimingPosition timing)
         {
             if (PositionChanging is null) { return false; }
-            if (!PositionChanging.Invoke(this, lane, timing)) { return false; }
+            if (!PositionChanging.Invoke(this, lane, timing))
+            {
+                timing = Timing;
+            }
             return base.ReLocate(lane, timing);
         }
 

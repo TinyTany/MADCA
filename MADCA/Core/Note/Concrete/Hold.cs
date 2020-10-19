@@ -12,29 +12,48 @@ namespace MADCA.Core.Note.Concrete
     public sealed class Hold : ILongNote<HoldStepNote>
     {
         private readonly List<HoldStepNote> stepNotes;
-        private readonly HoldBegin holdBegin;
-        private readonly HoldEnd holdEnd;
+
+        public HoldBegin HoldBegin { get; }
+        public HoldEnd HoldEnd { get; }
 
         public IReadOnlyList<HoldStepNote> StepNotes => stepNotes;
+
+        // NOTE: こんな実装で大丈夫なのだろうか…
+        public IReadOnlyList<NoteBase> AllNotes
+        {
+            get
+            {
+                var notes = stepNotes;
+                return notes.Union(new List<NoteBase>(){ HoldBegin, HoldEnd }).ToList();
+            }
+        }
 
         private Hold() { }
 
         public Hold(LanePotision lane, TimingPosition timingBegin, TimingPosition timingEnd, NoteSize size)
         {
             System.Diagnostics.Debug.Assert(timingBegin < timingEnd);
-            holdBegin = new HoldBegin(lane, timingBegin, size);
-            holdBegin.PositionChanging += (begin, beginLane, beginTiming) =>
+            HoldBegin = new HoldBegin(lane, timingBegin, size);
+            HoldBegin.PositionChanging += (begin, beginLane, beginTiming) =>
             {
                 if (stepNotes.Where(x => x.Timing <= beginTiming).Any())
                 {
                     return false;
                 }
+                if (!(beginTiming < HoldEnd.Timing))
+                {
+                    return false;
+                }
                 return true;
             };
-            holdEnd = new HoldEnd(lane, timingEnd, size);
-            holdEnd.PositionChanging += (end, endLane, endTiming) =>
+            HoldEnd = new HoldEnd(lane, timingEnd, size);
+            HoldEnd.PositionChanging += (end, endLane, endTiming) =>
             {
                 if (stepNotes.Where(x => x.Timing >= endTiming).Any())
+                {
+                    return false;
+                }
+                if (!(HoldBegin.Timing < endTiming))
                 {
                     return false;
                 }
@@ -76,7 +95,7 @@ namespace MADCA.Core.Note.Concrete
         private bool IsStepNoteTimingValid(TimingPosition timing)
         {
             if (timing is null) { return false; }
-            if (timing <= holdBegin.Timing) { return false; }
+            if (timing <= HoldBegin.Timing) { return false; }
             if (stepNotes.Where(x => x.Timing == timing).Any()) { return false; }
             return true;
         }
