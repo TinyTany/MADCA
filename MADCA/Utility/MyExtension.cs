@@ -66,7 +66,7 @@ namespace MADCA.Utility
             var beginRect = hold.HoldBegin.GetRectangle(env);
             ps1.Add(beginRect.GetLeftMiddle());
             ps2.Add(beginRect.GetRightMiddle());
-            foreach (var note in hold.AllNotes.Where(x => x != hold.HoldBegin))
+            foreach (var note in hold.AllNotes.Where(x => x != hold.HoldBegin).OrderBy(x => x.Timing))
             {
                 var rect = note.GetRectangle(env);
                 var diff = note.Lane.RawLane - hold.HoldBegin.Lane.RawLane;
@@ -82,6 +82,39 @@ namespace MADCA.Utility
                 gPath.AddLine(ps1[i], ps1[i + 1]);
             }
             return gPath;
+        }
+
+        public static bool Contains(this Hold hold, Point p, IReadOnlyEditorLaneEnvironment env)
+        {
+            var laneWidth = env.LaneUnitWidth * env.LaneCount;
+            
+            var matToLeft = new Matrix();
+            matToLeft.Translate(-laneWidth, 0);
+            var matToRight = new Matrix();
+            matToRight.Translate(laneWidth, 0);
+            var leftTimes = 0;
+
+            using (var path = hold.GetGraphicsPath(env))
+            {
+                if (path.IsVisible(p)) { return true; }
+                while (path.GetBounds().Right > env.LaneRect.Right)
+                {
+                    path.Transform(matToLeft);
+                    if (path.IsVisible(p)) { return true; }
+                    leftTimes++;
+                }
+                var matToReset = new Matrix();
+                matToReset.Translate(laneWidth * leftTimes, 0);
+                path.Transform(matToReset);
+
+                while (path.GetBounds().Left < env.LaneRect.Left)
+                {
+                    path.Transform(matToRight);
+                    if (path.IsVisible(p)) { return true; }
+                }
+            }
+
+            return false;
         }
     }
 }
