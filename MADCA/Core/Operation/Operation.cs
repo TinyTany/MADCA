@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MADCA.Core.Data;
 using MADCA.Core.Note;
 using MADCA.Core.Note.Abstract;
+using MADCA.Core.Note.Concrete;
 
 namespace MADCA.Core.Operation
 {
@@ -64,6 +66,78 @@ namespace MADCA.Core.Operation
             Undo = () =>
             {
                 note.ReLocate(before.Lane, before.Timing);
+            };
+        }
+    }
+
+    public class AddHoldOperation : Operation
+    {
+        private AddHoldOperation() { }
+
+        public AddHoldOperation(NoteBook book, Hold hold)
+        {
+            Invoke = () =>
+            {
+                book.PutHold(hold);
+            };
+
+            Undo = () =>
+            {
+                book.UnPutHold(hold);
+            };
+        }
+    }
+
+    public class DeleteHoldOperation : Operation
+    {
+        private DeleteHoldOperation() { }
+
+        public DeleteHoldOperation(NoteBook book, Hold hold)
+        {
+            Invoke += () =>
+            {
+                book.UnPutHold(hold);
+            };
+
+            Undo += () =>
+            {
+                book.PutHold(hold);
+            };
+        }
+    }
+
+    public class AddHoldRelayOperation : Operation
+    {
+        private AddHoldRelayOperation() { }
+
+        public AddHoldRelayOperation(Hold hold, HoldRelay relay)
+        {
+            Invoke += () =>
+            {
+                hold.Put(relay);
+            };
+
+            Undo += () =>
+            {
+                hold.UnPut(relay);
+            };
+        }
+    }
+
+    public class DeleteHoldRelayOperation : Operation
+    {
+        private DeleteHoldRelayOperation() { }
+
+        public DeleteHoldRelayOperation(Hold hold, HoldRelay relay)
+        {
+            Invoke += () =>
+            {
+                hold.UnPut(relay);
+            };
+
+            Undo += () =>
+            {
+                hold.Put(relay);
             };
         }
     }

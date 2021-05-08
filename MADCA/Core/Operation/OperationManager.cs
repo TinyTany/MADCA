@@ -20,7 +20,7 @@ namespace MADCA.Core.Operation
             undoStatus = redoStatus = false;
         }
 
-        private void AddOperation(Operation op)
+        public void AddOperation(Operation op)
         {
             stackUndo.Push(op);
             stackRedo.Clear();
