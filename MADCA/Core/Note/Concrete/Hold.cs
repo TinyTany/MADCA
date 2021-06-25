@@ -23,8 +23,10 @@ namespace MADCA.Core.Note.Concrete
         {
             get
             {
-                var notes = stepNotes;
-                return notes.Union(new List<NoteBase>(){ HoldBegin, HoldEnd }).ToList();
+                var notes = new List<NoteBase>() { HoldBegin };
+                notes.AddRange(StepNotes);
+                notes.Add(HoldEnd);
+                return notes;
             }
         }
 
@@ -95,7 +97,7 @@ namespace MADCA.Core.Note.Concrete
         private bool IsStepNoteTimingValid(TimingPosition timing)
         {
             if (timing is null) { return false; }
-            if (timing <= HoldBegin.Timing) { return false; }
+            if (timing <= HoldBegin.Timing || timing >= HoldEnd.Timing) { return false; }
             if (stepNotes.Where(x => x.Timing == timing).Any()) { return false; }
             return true;
         }
