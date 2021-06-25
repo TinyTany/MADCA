@@ -76,6 +76,7 @@
     <Compile Include="Core\Note\Concrete\HoldBegin.cs" />
     <Compile Include="Core\Note\Concrete\HoldEnd.cs" />
     <Compile Include="Core\Note\Concrete\HoldRelay.cs" />
+    <Compile Include="Core\Note\Concrete\PreviewNote.cs" />
     <Compile Include="Core\Note\Concrete\SlideL.cs" />
     <Compile Include="Core\Note\Concrete\SlideR.cs" />
     <Compile Include="Core\Note\Concrete\SnapD.cs" />
