@@ -103,6 +103,7 @@
     <Compile Include="UI\PictureBoxHandler.cs" />
     <Compile Include="Utility\MyExtension.cs" />
     <Compile Include="Utility\MyMath.cs" />
+    <Compile Include="Utility\MyUtil.cs" />
     <Compile Include="Utility\PositionConverter.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
