@@ -68,10 +68,6 @@
     <Compile Include="Core\Graphics\LaneDrawer.cs" />
     <Compile Include="Core\Graphics\NoteDrawer.cs" />
     <Compile Include="Core\Graphics\PreviewDrawer.cs" />
-    <Compile Include="Core\MaterialBox\MaterialBook.cs" />
-    <Compile Include="Core\MaterialBox\NoteBox.cs" />
-    <Compile Include="Core\MaterialBox\RectangleBox.cs" />
-    <Compile Include="Core\MaterialBox\ScoreBox.cs" />
     <Compile Include="Core\MusicScore.cs" />
     <Compile Include="Core\Note\Abstract\HoldStepNote.cs" />
     <Compile Include="Core\Note\Abstract\ShortNote.cs" />
