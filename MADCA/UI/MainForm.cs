@@ -1,17 +1,16 @@
 ﻿using MADCA.Core.Data;
 using MADCA.Core.Graphics;
+using MADCA.Core.Note;
 using MADCA.Core.Note.Abstract;
 using MADCA.Core.Note.Concrete;
+using MADCA.Core.Operation;
 using MADCA.Core.Score;
 using MADCA.Utility;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MADCA.UI
@@ -24,28 +23,28 @@ namespace MADCA.UI
             InitializeComponent();
             Text = appName;
             var pbox = new PictureBox() { Location = new Point(), Size = ClientSize };
-            var laneEnv = new Core.Data.EditorLaneEnvironment(new Size(pbox.Width / 2, pbox.Height));
-            var previewEnv = new Core.Data.PreviewDisplayEnvironment(new Point(pbox.Width / 2, 0), new Size(pbox.Width / 2, pbox.Height));
-            var scoreBook = new Core.Score.ScoreBook();
-            for (var i = 0; i < 100; ++i) { scoreBook.AddScoreLast(new Core.Score.Score(4, 4)); }
+            var laneEnv = new EditorLaneEnvironment(new Size(pbox.Width / 2, pbox.Height));
+            var previewEnv = new PreviewDisplayEnvironment(new Point(pbox.Width / 2, 0), new Size(pbox.Width / 2, pbox.Height));
+            var scoreBook = new ScoreBook();
+            for (var i = 0; i < 100; ++i) { scoreBook.AddScoreLast(new Score(4, 4)); }
             pbox.Paint += (s, e) => 
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                Core.Graphics.LaneDrawer.Draw(e.Graphics, laneEnv, scoreBook.Scores);
-                Core.Graphics.PreviewDrawer.Draw(e.Graphics, previewEnv, scoreBook.Scores);
+                LaneDrawer.Draw(e.Graphics, laneEnv, scoreBook.Scores);
+                PreviewDrawer.Draw(e.Graphics, previewEnv, scoreBook.Scores);
             };
             pbox.MouseWheel += (s, e) =>
             {
                 // NOTE: WHEEL_DELTAは120らしい...
-                if (laneEnv.GetEditorLaneRegion(e.Location) == Core.Data.EditorLaneRegion.Lane)
+                if (laneEnv.GetEditorLaneRegion(e.Location) == EditorLaneRegion.Lane)
                 {
                     laneEnv.OffsetXRaw -= e.Delta / 120 * (int)laneEnv.LaneUnitWidth;
                 }
                 else
                 {
                     laneEnv.OffsetY += e.Delta;
-                    previewEnv.TimingOffset = new MADCA.Core.Data.TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
+                    previewEnv.TimingOffset = new TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
                 }
                 pbox.Refresh();
             };
@@ -53,7 +52,7 @@ namespace MADCA.UI
             Point? p = null;
             pbox.MouseDown += (s, e) =>
             {
-                if (e.Button == MouseButtons.Middle && laneEnv.GetEditorLaneRegion(e.Location) == Core.Data.EditorLaneRegion.Lane)
+                if (e.Button == MouseButtons.Middle && laneEnv.GetEditorLaneRegion(e.Location) == EditorLaneRegion.Lane)
                 {
                     offset = new Point(laneEnv.OffsetXRaw, laneEnv.OffsetY);
                     p = e.Location;
@@ -70,7 +69,7 @@ namespace MADCA.UI
                     if (Math.Abs(diffY) > 10)
                     {
                         laneEnv.OffsetY += diffY;
-                        previewEnv.TimingOffset = new MADCA.Core.Data.TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
+                        previewEnv.TimingOffset = new TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
                     }
                     pbox.Refresh();
                 }
