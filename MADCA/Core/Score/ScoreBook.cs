@@ -40,7 +40,6 @@ namespace MADCA.Core.Score
             scores.Remove(score);
             foreach(var item in scores.Skip(index))
             {
-                item.OnChanged();
                 item.TimingBegin -= new Data.TimingPosition(score.BeatDen, (int)score.BeatNum);
             }
             return true;
