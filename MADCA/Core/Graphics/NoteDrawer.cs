@@ -46,33 +46,48 @@ namespace MADCA.Core.Graphics
         public static void DrawHoldRegionToLane(System.Drawing.Graphics g, IReadOnlyEditorLaneEnvironment env, Hold hold)
         {
             using (var sb = new SolidBrush(Color.FromArgb(200, 200, 175, 90)))
+            using (var path = hold.GetGraphicsPath(env))
+            using(var matToLeft = new Matrix())
+            using(var matToRight = new Matrix())
+            using(var matToReset = new Matrix())
             {
-                var laneWidth = env.LaneUnitWidth * env.LaneCount;
-                g.Clip = new Region(env.LaneRect);
-                var path = hold.GetGraphicsPath(env);
-                var matToLeft = new Matrix();
+                var laneWidth = env.LaneUnitWidth * MadcaEnv.LaneCount;
+                g.Clip = new Region(env.LaneRect);                
                 matToLeft.Translate(-laneWidth, 0);
-                var matToRight = new Matrix();
                 matToRight.Translate(laneWidth, 0);
                 var leftTimes = 0;
 
-                g.FillPath(sb, path);
+                try
+                {
+                    g.FillPath(sb, path);
+                }
+                catch (Exception) { }
                 while (path.GetBounds().Right > env.LaneRect.Right)
                 {
                     path.Transform(matToLeft);
-                    g.FillPath(sb, path);
+                    try
+                    {
+                        g.FillPath(sb, path);
+                    }
+                    catch (Exception) { }
                     leftTimes++;
                 }
-                var matToReset = new Matrix();
                 matToReset.Translate(laneWidth * leftTimes, 0);
                 path.Transform(matToReset);
                 
                 while (path.GetBounds().Left < env.LaneRect.Left)
                 {
                     path.Transform(matToRight);
-                    g.FillPath(sb, path);
+                    try
+                    {
+                        g.FillPath(sb, path);
+                    }
+                    catch (Exception) { }
                 }
                 g.ResetClip();
+                matToLeft.Dispose();
+                matToRight.Dispose();
+                matToReset.Dispose();
             }
         }
 
@@ -159,8 +174,7 @@ namespace MADCA.Core.Graphics
                 path.AddLine(psLeft[i], psLeft[i + 1]);
             }
 
-            try
-            {
+            if (rend > 0) {
                 path.AddArc(
                 (float)(env.CenterPoint.X - rend),
                 (float)(env.CenterPoint.Y - rend),
@@ -169,13 +183,11 @@ namespace MADCA.Core.Graphics
                 CalcCsDeg(end.Lane.NormalizedLane * 6),
                 CalcCsDegSize(end.NoteSize.Size * 6));
             }
-            catch (Exception) { }
             for(var i = psRight.Count - 1; i > 0; --i)
             {
                 path.AddLine(psRight[i], psRight[i - 1]);
             }
-            try
-            {
+            if (rbegin > 0) {
                 path.AddArc(
                 (float)(env.CenterPoint.X - rbegin),
                 (float)(env.CenterPoint.Y - rbegin),
@@ -184,11 +196,15 @@ namespace MADCA.Core.Graphics
                 CalcCsDeg((begin.Lane.NormalizedLane + begin.NoteSize.Size) * 6),
                 CalcCsDegSize(-begin.NoteSize.Size * 6));
             }
-            catch (Exception) { }
 
+            // 色は決め打ちではなく，名前つけて一か所にまとめた方がいいかもね
             using (var sb = new SolidBrush(Color.FromArgb(200, 200, 175, 90)))
             {
-                g.FillPath(sb, path);
+                try
+                {
+                    g.FillPath(sb, path);
+                }
+                catch (Exception) { }
             }
             path.Dispose();
             g.ResetClip();
@@ -255,6 +271,8 @@ namespace MADCA.Core.Graphics
                     return Color.FromArgb(200, 200, 130);
                 case NoteType.HoldEnd:
                     return Color.FromArgb(200, 150, 50);
+                case NoteType.Preview:
+                    return Color.FromArgb(200, 255, 255, 255);
                 default:
                     return Color.White;
             }
