@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using MADCA.Core.Data;
 using MADCA.Core.Note.Concrete;
-using MADCA.Core.Note.Interface;
-using MADCA.UI;
 
 namespace MADCA.Core.Note.Abstract
 {

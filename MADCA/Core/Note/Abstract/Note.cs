@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MADCA.Core.Data;
-using MADCA.Core.Note.Interface;
+﻿using MADCA.Core.Data;
 using System.Drawing;
 using MADCA.Utility;
 

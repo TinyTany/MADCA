@@ -1,9 +1,4 @@
-﻿using MADCA.Core.Note.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using MADCA.Core.Data;
 
 namespace MADCA.Core.Note.Abstract

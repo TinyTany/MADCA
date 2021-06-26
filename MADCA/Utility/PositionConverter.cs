@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MADCA.Core.Data;
 using System.Drawing;
 using MADCA.Core.Score;
-using System.IO;
 using MadcaEnv = MADCA.Core.Data.MadcaEnv;
 
 namespace MADCA.Utility

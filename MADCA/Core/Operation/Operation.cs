@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using MADCA.Core.Data;
 using MADCA.Core.Note;
 using MADCA.Core.Note.Abstract;
