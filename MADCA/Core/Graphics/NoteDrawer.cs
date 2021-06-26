@@ -22,7 +22,7 @@ namespace MADCA.Core.Graphics
             {
                 g.Clip = new Region(env.LaneRect);
                 var rect = note.GetRectangle(env);
-                if (note.NoteType == Note.Interface.NoteType.HoldRelay)
+                if (note.NoteType == NoteType.HoldRelay)
                 {
                     g.DrawRectangle(pen, rect);
                 }
@@ -31,7 +31,7 @@ namespace MADCA.Core.Graphics
                     g.FillRectangle(sb, rect);
                 }
                 rect.X -= (int)(MadcaEnv.LaneCount * env.LaneUnitWidth);
-                if (note.NoteType == Note.Interface.NoteType.HoldRelay)
+                if (note.NoteType == NoteType.HoldRelay)
                 {
                     g.DrawRectangle(pen, rect);
                 }
@@ -239,21 +239,21 @@ namespace MADCA.Core.Graphics
         {
             switch (note.NoteType)
             {
-                case Note.Interface.NoteType.Touch:
+                case NoteType.Touch:
                     return Color.FromArgb(250, 10, 180);
-                case Note.Interface.NoteType.Chain:
+                case NoteType.Chain:
                     return Color.FromArgb(250, 200, 30);
-                case Note.Interface.NoteType.SlideL:
+                case NoteType.SlideL:
                     return Color.FromArgb(255, 128, 0);
-                case Note.Interface.NoteType.SlideR:
+                case NoteType.SlideR:
                     return Color.FromArgb(25, 200, 25);
-                case Note.Interface.NoteType.SnapU:
+                case NoteType.SnapU:
                     return Color.FromArgb(190, 0, 0);
-                case Note.Interface.NoteType.SnapD:
+                case NoteType.SnapD:
                     return Color.FromArgb(20, 140, 220);
-                case Note.Interface.NoteType.HoldBegin:
+                case NoteType.HoldBegin:
                     return Color.FromArgb(200, 200, 130);
-                case Note.Interface.NoteType.HoldEnd:
+                case NoteType.HoldEnd:
                     return Color.FromArgb(200, 150, 50);
                 default:
                     return Color.White;
