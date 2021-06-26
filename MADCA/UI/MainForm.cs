@@ -34,63 +34,27 @@ namespace MADCA.UI
                 LaneDrawer.Draw(e.Graphics, laneEnv, scoreBook.Scores);
                 PreviewDrawer.Draw(e.Graphics, previewEnv, scoreBook.Scores);
             };
-            pbox.MouseWheel += (s, e) =>
             {
-                // NOTE: WHEEL_DELTAは120らしい...
-                if (laneEnv.GetEditorLaneRegion(e.Location) == EditorLaneRegion.Lane)
                 {
-                    laneEnv.OffsetXRaw -= e.Delta / 120 * (int)laneEnv.LaneUnitWidth;
                 }
                 else
                 {
-                    laneEnv.OffsetY += e.Delta;
-                    previewEnv.TimingOffset = new TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
-                }
-                pbox.Refresh();
-            };
-            Point? offset = null;
-            Point? p = null;
-            pbox.MouseDown += (s, e) =>
-            {
-                if (e.Button == MouseButtons.Middle && laneEnv.GetEditorLaneRegion(e.Location) == EditorLaneRegion.Lane)
-                {
-                    offset = new Point(laneEnv.OffsetXRaw, laneEnv.OffsetY);
-                    p = e.Location;
-                    pbox.Cursor = Cursors.Cross;
                 }
             };
-            pbox.MouseMove += (s, e) =>
             {
-                if (offset != null && p != null)
                 {
-                    laneEnv.OffsetXRaw = offset.Value.X - (e.X - p.Value.X);
-                    // NOTE: ある程度マウスが移動したときのみ縦方向の更新を行う（これをやらないと描画が不安定になる）
-                    var diffY = offset.Value.Y + (e.Y - p.Value.Y) - laneEnv.OffsetY;
-                    if (Math.Abs(diffY) > 10)
+                }
+            };
+            {
+                {
                     {
-                        laneEnv.OffsetY += diffY;
-                        previewEnv.TimingOffset = new TimingPosition(laneEnv.TimingUnitHeight, laneEnv.OffsetY);
                     }
-                    pbox.Refresh();
                 }
             };
-            pbox.MouseUp += (s, e) =>
             {
-                offset = p = null;
-                pbox.Cursor = Cursors.Default;
             };
-            SizeChanged += (s, e) =>
             {
-                pbox.Size = ClientSize;
-                var halfSize = new Size(ClientSize.Width / 2, ClientSize.Height);
-                laneEnv.PanelSize = previewEnv.DisplaySize = halfSize;
-                previewEnv.DisplayOffset = new Point(halfSize.Width, 0);
-                pbox.Refresh();
             };
-            Controls.Add(pbox);
-            MinimumSize = new Size((int)laneEnv.SideMargin * 2, 10);
-
-            SetEvent(pbox, laneEnv, previewEnv, scoreBook.Scores);
         }
 
         private static void SetEvent(PictureBox box, IReadOnlyEditorLaneEnvironment laneEnv, IReadOnlyPreviewDisplayEnvironment previewEnv, IReadOnlyList<IReadOnlyScore> scores)
