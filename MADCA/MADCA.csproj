@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -68,6 +70,8 @@
     <Compile Include="Core\Graphics\LaneDrawer.cs" />
     <Compile Include="Core\Graphics\NoteDrawer.cs" />
     <Compile Include="Core\Graphics\PreviewDrawer.cs" />
+    <Compile Include="Core\FumenData\MadcaFumenData.cs" />
+    <Compile Include="Core\IO\ScoreDataExchanger.cs" />
     <Compile Include="Core\MusicScore.cs" />
     <Compile Include="Core\Note\Abstract\HoldStepNote.cs" />
     <Compile Include="Core\Note\Abstract\ShortNote.cs" />
@@ -81,7 +85,6 @@
     <Compile Include="Core\Note\Concrete\SlideR.cs" />
     <Compile Include="Core\Note\Concrete\SnapD.cs" />
     <Compile Include="Core\Note\Concrete\SnapU.cs" />
-    <Compile Include="Core\Note\Abstract\Note.cs" />
     <Compile Include="Core\Note\Concrete\Touch.cs" />
     <Compile Include="Core\Note\NoteBook.cs" />
     <Compile Include="Core\Operation\Operation.cs" />
