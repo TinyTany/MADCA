@@ -10,32 +10,38 @@ namespace MADCA.Core.Data
     public interface IReadOnlyPreviewDisplayEnvironment
     {
         /// <summary>
-        /// 全体の大枠のサイズ
+        /// このディスプレイを表す矩形
         /// </summary>
-        Size DisplaySize { get; }
-        Point DisplayOffset { get; }
+        Rectangle DisplayRegion { get; }
+        /// <summary>
+        /// 上下左右の余白
+        /// </summary>
         int Margin { get; }
         /// <summary>
         /// 譜面レーン領域の円に外接する矩形（正方形）
         /// </summary>
         Rectangle Circle { get; }
+        /// <summary>
+        /// 譜面レーン領域の円の中心座標
+        /// </summary>
         Point CenterPoint { get; }
+        /// <summary>
+        /// 譜面レーン領域の円の半径
+        /// </summary>
         int Radius { get; }
         /// <summary>
         /// 一番手前のTiming位置
         /// </summary>
         TimingPosition TimingOffset { get; }
         /// <summary>
-        /// 円に対するTimingの長さ
+        /// 円の半径に対するTimingの長さ
         /// </summary>
         TimingPosition TimingLength { get; }
     }
 
     public sealed class PreviewDisplayEnvironment : IReadOnlyPreviewDisplayEnvironment
     {
-        public Size DisplaySize { get; set; }
-
-        public Point DisplayOffset { get; set; }
+        public Rectangle DisplayRegion { get; set; }
 
         public int Margin { get; } = 30;
 
@@ -45,20 +51,20 @@ namespace MADCA.Core.Data
             {
                 var rect = new Rectangle();
                 int min;
-                if (DisplaySize.Width < DisplaySize.Height)
+                if (DisplayRegion.Width < DisplayRegion.Height)
                 {
                     rect.X = Margin;
-                    rect.Y = (DisplaySize.Height - DisplaySize.Width) / 2 + Margin;
-                    min = DisplaySize.Width;
+                    rect.Y = (DisplayRegion.Height - DisplayRegion.Width) / 2 + Margin;
+                    min = DisplayRegion.Width;
                 }
                 else
                 {
-                    rect.X = (DisplaySize.Width - DisplaySize.Height) / 2 + Margin;
+                    rect.X = (DisplayRegion.Width - DisplayRegion.Height) / 2 + Margin;
                     rect.Y = Margin;
-                    min = DisplaySize.Height;
+                    min = DisplayRegion.Height;
                 }
-                rect.X += DisplayOffset.X;
-                rect.Y += DisplayOffset.Y;
+                rect.X += DisplayRegion.X;
+                rect.Y += DisplayRegion.Y;
                 var r = min / 2 - Margin;
                 if (r < 0) { r = 0; }
                 rect.Width = rect.Height = 2 * r;
@@ -81,18 +87,12 @@ namespace MADCA.Core.Data
 
         private PreviewDisplayEnvironment() { }
 
-        public PreviewDisplayEnvironment(Size size)
+        public PreviewDisplayEnvironment(Point p, Size s)
         {
-            DisplaySize = size;
+            DisplayRegion = new Rectangle(p, s);
             // NOTE: 決め打ち
             TimingOffset = new TimingPosition(1, 0);
             TimingLength = new TimingPosition(1, 2);
-        }
-
-        public PreviewDisplayEnvironment(Point p, Size s)
-            : this(s)
-        {
-            DisplayOffset = p;
         }
     }
 }

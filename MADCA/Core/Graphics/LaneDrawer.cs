@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using MADCA.Core.Data;
 using MADCA.Utility;
+using MadcaEnv = MADCA.Core.Data.MadcaEnv;
 
 namespace MADCA.Core.Graphics
 {
@@ -19,7 +20,7 @@ namespace MADCA.Core.Graphics
             using(var backgroundBrush = new SolidBrush(backgroundColor))
             using(var laneBackBrush = new SolidBrush(laneBackColor))
             {
-                g.FillRectangle(backgroundBrush, new Rectangle(env.PanelOffset, env.PanelSize));
+                g.FillRectangle(backgroundBrush, env.PanelRegion);
                 g.FillRectangle(laneBackBrush, env.LaneRect);
             }
             using(var penBorder = new Pen(Color.White))
@@ -35,15 +36,15 @@ namespace MADCA.Core.Graphics
                 var curLane = (diffX + env.OffsetX) / env.LaneUnitWidth;
                 for (; curX <= env.LaneRect.Right; curX += (int)env.LaneUnitWidth, ++curLane)
                 {
-                    curLane %= env.LaneCount;
+                    curLane %= MadcaEnv.LaneCount;
                     if (curLane % env.LaneGroupCount == 0)
                     {
-                        g.DrawLine(penMain, new PointF(curX, env.PanelOffset.Y), new PointF(curX, env.PanelOffset.Y + env.AvailableLaneHeight));
+                        g.DrawLine(penMain, new PointF(curX, env.PanelRegion.Y), new PointF(curX, env.PanelRegion.Y + env.AvailableLaneHeight));
                         var textWidth = System.Windows.Forms.TextRenderer.MeasureText(g, curLane.ToString(), myFont).Width;
-                        g.DrawString(curLane.ToString(), myFont, Brushes.White, new PointF(curX - textWidth / 2 + 1.5f, env.PanelOffset.Y + env.AvailableLaneHeight + 5));
+                        g.DrawString(curLane.ToString(), myFont, Brushes.White, new PointF(curX - textWidth / 2 + 1.5f, env.PanelRegion.Y + env.AvailableLaneHeight + 5));
                         continue;
                     }
-                    g.DrawLine(penSub, new PointF(curX, env.PanelOffset.Y), new PointF(curX, env.PanelOffset.Y + env.AvailableLaneHeight));
+                    g.DrawLine(penSub, new PointF(curX, env.PanelRegion.Y), new PointF(curX, env.PanelRegion.Y + env.AvailableLaneHeight));
                 }
 
                 // 小節線などを描画

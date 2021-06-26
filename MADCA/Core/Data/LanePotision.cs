@@ -15,7 +15,7 @@ namespace MADCA.Core.Data
         {
             get
             {
-                return MyMath.PositiveMod(RawLane, (int)Environment.LaneCount);
+                return MyMath.PositiveMod(RawLane, (int)MadcaEnv.LaneCount);
             }
         }
 

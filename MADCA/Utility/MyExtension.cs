@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MadcaEnv = MADCA.Core.Data.MadcaEnv;
 
 namespace MADCA.Utility
 {
@@ -45,7 +46,7 @@ namespace MADCA.Utility
             {
                 return true;
             }
-            tmp.X -= (int)(env.LaneUnitWidth * env.LaneCount);
+            tmp.X -= (int)(env.LaneUnitWidth * MadcaEnv.LaneCount);
             return tmp.Contains(p);
         }
 
@@ -86,7 +87,7 @@ namespace MADCA.Utility
 
         public static bool Contains(this Hold hold, Point p, IReadOnlyEditorLaneEnvironment env)
         {
-            var laneWidth = env.LaneUnitWidth * env.LaneCount;
+            var laneWidth = env.LaneUnitWidth * MadcaEnv.LaneCount;
             
             var matToLeft = new Matrix();
             matToLeft.Translate(-laneWidth, 0);

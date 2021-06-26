@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MadcaEnv = MADCA.Core.Data.MadcaEnv;
 
 namespace MADCA.Core.Graphics
 {
@@ -31,7 +32,7 @@ namespace MADCA.Core.Graphics
                 {
                     g.FillRectangle(sb, rect);
                 }
-                rect.X -= (int)(env.LaneCount * env.LaneUnitWidth);
+                rect.X -= (int)(MadcaEnv.LaneCount * env.LaneUnitWidth);
                 if (note.NoteType == Note.Interface.NoteType.HoldRelay)
                 {
                     g.DrawRectangle(pen, rect);

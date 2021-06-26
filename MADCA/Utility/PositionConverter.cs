@@ -7,6 +7,7 @@ using MADCA.Core.Data;
 using System.Drawing;
 using MADCA.Core.Score;
 using System.IO;
+using MadcaEnv = MADCA.Core.Data.MadcaEnv;
 
 namespace MADCA.Utility
 {
@@ -24,7 +25,7 @@ namespace MADCA.Utility
         /// <returns></returns>
         public static bool ConvertRealToVirtual(IReadOnlyEditorLaneEnvironment env, Point p, uint beat, IReadOnlyList<IReadOnlyScore> scores, out Position position)
         {
-            p = new Point(p.X - env.PanelOffset.X, p.Y - env.PanelOffset.Y);
+            p = new Point(p.X - env.PanelRegion.X, p.Y - env.PanelRegion.Y);
             position = null;
             if (env.AvailableLaneWidth == 0) { return false; }
             var laneLeft = env.SideMargin;
@@ -36,7 +37,7 @@ namespace MADCA.Utility
                 lanePos--;
             }
             var newLanePos = new LanePotision(lanePos);
-            var timing = new TimingPosition(env.TimingUnitHeight, (env.PanelSize.Height - p.Y) - (int)env.BottomMargin + env.OffsetY);
+            var timing = new TimingPosition(env.TimingUnitHeight, (env.PanelRegion.Height - p.Y) - (int)env.BottomMargin + env.OffsetY);
             var accum = new TimingPosition(1, 0);
             foreach(var score in scores)
             {
@@ -61,8 +62,8 @@ namespace MADCA.Utility
         {
             var px = (int)(env.SideMargin + position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw);
             var py = (int)(position.Timing.BarRatio * env.TimingUnitHeight - env.OffsetY);
-            px += env.PanelOffset.X;
-            py = env.PanelSize.Height - py - env.PanelOffset.Y - (int)env.BottomMargin;
+            px += env.PanelRegion.X;
+            py = env.PanelRegion.Height - py - env.PanelRegion.Y - (int)env.BottomMargin;
             return new Point(px, py);
         }
 
@@ -75,11 +76,11 @@ namespace MADCA.Utility
         /// <returns></returns>
         public static Point ConvertVirtualToRealNorm(IReadOnlyEditorLaneEnvironment env, Position position)
         {
-            var xtmp = MyMath.PositiveMod(position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw, env.LaneCount * env.LaneUnitWidth);
+            var xtmp = MyMath.PositiveMod(position.Lane.RawLane * env.LaneUnitWidth - env.OffsetXRaw, MadcaEnv.LaneCount * env.LaneUnitWidth);
             var px = (int)(env.SideMargin + (int)xtmp);
             var py = (int)(position.Timing.BarRatio * env.TimingUnitHeight - env.OffsetY);
-            px += env.PanelOffset.X;
-            py = env.PanelSize.Height - py - env.PanelOffset.Y - (int)env.BottomMargin;
+            px += env.PanelRegion.X;
+            py = env.PanelRegion.Height - py - env.PanelRegion.Y - (int)env.BottomMargin;
             return new Point(px, py);
         }
     }

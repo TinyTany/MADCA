@@ -16,7 +16,7 @@ namespace MADCA.Core.Graphics
             using(var gameDisplayBrush = new SolidBrush(Color.FromArgb(50, 50, 50)))
             using(var whitePen = new Pen(Color.White))
             {
-                g.FillRectangle(backBrush, new Rectangle(env.DisplayOffset, env.DisplaySize));
+                g.FillRectangle(backBrush,env.DisplayRegion);
                 g.FillEllipse(gameDisplayBrush, env.Circle);
                 g.DrawEllipse(whitePen, env.Circle);
 

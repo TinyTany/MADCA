@@ -8,7 +8,7 @@ using MADCA.Utility;
 
 namespace MADCA.Core.Data
 {
-    public static class Environment
+    public static class MadcaEnv
     {
         /// <summary>
         /// レーン数（不変）
@@ -29,14 +29,16 @@ namespace MADCA.Core.Data
     public interface IReadOnlyEditorLaneEnvironment
     {
         /// <summary>
-        /// レーン数（不変）
-        /// </summary>
-        uint LaneCount { get; }
-        /// <summary>
         /// 何レーン分をひとまとまりとみなすかの値
         /// </summary>
         uint LaneGroupCount { get; }
+        /// <summary>
+        /// 左右の余白
+        /// </summary>
         uint SideMargin { get; }
+        /// <summary>
+        /// 下の余白
+        /// </summary>
         uint BottomMargin { get; }
         /// <summary>
         /// Lane幅1に対応する画面上でのピクセル数
@@ -47,18 +49,20 @@ namespace MADCA.Core.Data
         /// </summary>
         uint TimingUnitHeight { get; }
         /// <summary>
-        /// このパネル全体のサイズ
+        /// このパネルの描画領域
         /// </summary>
-        Size PanelSize { get; }
+        Rectangle PanelRegion { get; }
         /// <summary>
-        /// このパネルの描画オフセット（左上）
-        /// </summary>
-        Point PanelOffset { get; }
-        /// <summary>
-        /// レーンを表す矩形（LocationはPanelOffsetを加味した絶対座標）
+        /// レーンを表す矩形（Locationは絶対座標）
         /// </summary>
         Rectangle LaneRect { get; }
+        /// <summary>
+        /// 現在の編集可能レーン領域の幅
+        /// </summary>
         uint AvailableLaneWidth { get; }
+        /// <summary>
+        /// 現在の編集可能レーン領域の高さ
+        /// </summary>
         uint AvailableLaneHeight { get; }
         /// <summary>
         /// レーンの左下に対応するX軸方向のオフセット（正規化された値、絶対実座標、左下原点）
@@ -77,15 +81,13 @@ namespace MADCA.Core.Data
 
     public sealed class EditorLaneEnvironment : IReadOnlyEditorLaneEnvironment
     {
-        public uint LaneCount => Environment.LaneCount;
-
         public uint LaneGroupCount => 5;
         private readonly uint sideMarginMin = 100;
         public uint SideMargin
         {
             get
             {
-                var margin = (PanelSize.Width - LaneUnitWidth * LaneCount) / 2;
+                var margin = (PanelRegion.Width - LaneUnitWidth * MadcaEnv.LaneCount) / 2;
                 if (margin <= sideMarginMin) { return sideMarginMin; }
                 return (uint)margin;
             }
@@ -96,14 +98,13 @@ namespace MADCA.Core.Data
         
         public uint TimingUnitHeight { get; set; } = 384;
         
-        public Size PanelSize { get; set; }
-        public Point PanelOffset { get; set; }
+        public Rectangle PanelRegion { get; set; }
         public Rectangle LaneRect
         {
             get
             {
                 int x = (int)SideMargin;
-                return new Rectangle(x + PanelOffset.X, PanelOffset.Y, (int)AvailableLaneWidth, (int)AvailableLaneHeight);
+                return new Rectangle(x + PanelRegion.X, PanelRegion.Y, (int)AvailableLaneWidth, (int)AvailableLaneHeight);
             }
         }
 
@@ -111,9 +112,9 @@ namespace MADCA.Core.Data
         {
             get
             {
-                var width = PanelSize.Width - sideMarginMin * 2;
+                var width = PanelRegion.Width - sideMarginMin * 2;
                 if (width <= 0) { return 0; }
-                if (width >= LaneUnitWidth * LaneCount) { return LaneUnitWidth * LaneCount; }
+                if (width >= LaneUnitWidth * MadcaEnv.LaneCount) { return LaneUnitWidth * MadcaEnv.LaneCount; }
                 return (uint)width;
             }
         }
@@ -121,7 +122,7 @@ namespace MADCA.Core.Data
         {
             get
             {
-                var height = PanelSize.Height - BottomMargin;
+                var height = PanelRegion.Height - BottomMargin;
                 if (height <= 0) { return 0; }
                 return (uint)height;
             }
@@ -131,7 +132,7 @@ namespace MADCA.Core.Data
         {
             get 
             {
-                return MyMath.PositiveMod(OffsetXRaw, (int)(LaneCount * LaneUnitWidth));
+                return MyMath.PositiveMod(OffsetXRaw, (int)(MadcaEnv.LaneCount * LaneUnitWidth));
             }
         }
 
@@ -151,19 +152,19 @@ namespace MADCA.Core.Data
         
         public EditorLaneEnvironment(Size size)
         {
-            PanelSize = size;
+            PanelRegion = new Rectangle(new Point(), size);
             OffsetXRaw = _offsetY = 0;
         }
 
         public EditorLaneEnvironment(Point p, Size s)
-            : this(s)
         {
-            PanelOffset = p;
+            PanelRegion = new Rectangle(p, s);
+            OffsetXRaw = _offsetY = 0;
         }
 
         public EditorLaneRegion GetEditorLaneRegion(Point p)
         {
-            if (!(PanelOffset.X <= p.X && p.X <= PanelOffset.X + PanelSize.Width && PanelOffset.Y <= p.Y && p.Y <= PanelOffset.Y + PanelSize.Height))
+            if (!PanelRegion.Contains(p))
             {
                 return EditorLaneRegion.Unknown;
             }
