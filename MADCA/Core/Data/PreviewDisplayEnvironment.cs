@@ -32,6 +32,14 @@ namespace MADCA.Core.Data
         /// 円の半径に対するTimingの長さ
         /// </summary>
         TimingPosition TimingLength { get; }
+        /// <summary>
+        /// TimingLengthの最小値
+        /// </summary>
+        TimingPosition TimingLengthMin { get; }
+        /// <summary>
+        /// TimingLengthの最大値
+        /// </summary>
+        TimingPosition TimingLengthMax { get; }
     }
 
     public sealed class PreviewDisplayEnvironment : IReadOnlyPreviewDisplayEnvironment
@@ -78,7 +86,31 @@ namespace MADCA.Core.Data
         }
 
         public TimingPosition TimingOffset { get; set; }
-        public TimingPosition TimingLength { get; set; }
+        private TimingPosition _timingLength;
+        public TimingPosition TimingLength
+        {
+            get
+            {
+                return _timingLength;
+            }
+            set
+            {
+                if (value < TimingLengthMin)
+                {
+                    _timingLength = TimingLengthMin;
+                    return;
+                }
+                if (value > TimingLengthMax)
+                {
+                    _timingLength = TimingLengthMax;
+                    return;
+                }
+                _timingLength = value;
+            }
+        }
+        public TimingPosition TimingLengthMin { get; } = new TimingPosition(4, 1); // 決め打ち固定で良い気がする
+        public TimingPosition TimingLengthMax { get; } = new TimingPosition(1, 4); // 同上
+
 
         private PreviewDisplayEnvironment() { }
 
