@@ -13,7 +13,7 @@ namespace MADCA.Utility
 
         public static int Lcm(int a, int b)
         {
-            return (int)(a / Gcd((uint)a, (uint)b) * b);
+            return (int)(a / Gcd(a.ToUInt(), b.ToUInt()) * b);
         }
 
         /// <summary>

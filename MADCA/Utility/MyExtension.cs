@@ -115,5 +115,26 @@ namespace MADCA.Utility
 
             return false;
         }
+        /// <summary>
+        /// Int型の整数を安全にUIntに変換します。
+        /// 明示的なキャストは使用しないで下さい
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static uint ToUInt(this int i)
+        {
+            return i < 0 ? (uint)-i : (uint)i;
+        }
+
+        /// <summary>
+        /// Long型の整数を安全にUIntに変換します。
+        /// 明示的なキャストは使用しないで下さい
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static uint ToUInt(this long i)
+        {
+            return i < 0 ? (uint)-i : (uint)i;
+        }
     }
 }

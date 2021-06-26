@@ -84,7 +84,7 @@ namespace MADCA.Core.Data
             {
                 var margin = (PanelRegion.Width - LaneUnitWidth * MadcaEnv.LaneCount) / 2;
                 if (margin <= sideMarginMin) { return sideMarginMin; }
-                return (uint)margin;
+                return margin.ToUInt();
             }
         }
         public uint BottomMargin { get; } = 30;
@@ -110,7 +110,7 @@ namespace MADCA.Core.Data
                 var width = PanelRegion.Width - sideMarginMin * 2;
                 if (width <= 0) { return 0; }
                 if (width >= LaneUnitWidth * MadcaEnv.LaneCount) { return LaneUnitWidth * MadcaEnv.LaneCount; }
-                return (uint)width;
+                return width.ToUInt();
             }
         }
         public uint AvailableLaneHeight
@@ -119,7 +119,7 @@ namespace MADCA.Core.Data
             {
                 var height = PanelRegion.Height - BottomMargin;
                 if (height <= 0) { return 0; }
-                return (uint)height;
+                return height.ToUInt();
             }
         }
 

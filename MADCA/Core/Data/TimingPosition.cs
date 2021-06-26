@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MADCA.Utility;
+using System;
 
 namespace MADCA.Core.Data
 {
@@ -57,7 +58,7 @@ namespace MADCA.Core.Data
         /// </summary>
         private void Normalize()
         {
-            var gcd = Utility.MyMath.Gcd(DivValue, (uint)CntValue);
+            var gcd = Utility.MyMath.Gcd(DivValue, CntValue.ToUInt());
             if (gcd == 0) { return; }
             DivValue /= gcd;
             CntValue /= (int)gcd;
@@ -71,9 +72,9 @@ namespace MADCA.Core.Data
                 // どっちかがInvalidだったら計算結果はInvalidなものが返る
                 return new TimingPosition(0, 0);
             }
-            var newDiv = (uint)Utility.MyMath.Lcm((int)lhs.DivValue, (int)rhs.DivValue);
+            var newDiv = MyMath.Lcm((int)lhs.DivValue, (int)rhs.DivValue);
             var newCnt = (int)(newDiv / lhs.DivValue * lhs.CntValue + newDiv / rhs.DivValue * rhs.CntValue);
-            return new TimingPosition(newDiv, newCnt);
+            return new TimingPosition(newDiv.ToUInt(), newCnt);
         }
 
         public static TimingPosition operator-(TimingPosition lhs, TimingPosition rhs)
@@ -91,7 +92,7 @@ namespace MADCA.Core.Data
         public static TimingPosition operator/(TimingPosition lhs, TimingPosition rhs)
         {
             var cnt = rhs.CntValue < 0 ? rhs.DivValue * -1 : rhs.DivValue;
-            return lhs * new TimingPosition((uint)rhs.CntValue, (int)cnt);
+            return lhs * new TimingPosition(rhs.CntValue.ToUInt(), (int)cnt);
         }
         #endregion
 
