@@ -5,7 +5,7 @@ using MADCA.Core.Data;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class Hold : ILongNote<HoldStepNote>
+    public sealed class Hold
     {
         private readonly List<HoldStepNote> stepNotes;
 

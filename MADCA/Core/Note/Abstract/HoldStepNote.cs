@@ -3,7 +3,7 @@ using MADCA.Core.Data;
 
 namespace MADCA.Core.Note.Abstract
 {
-    public abstract class HoldStepNote : NoteBase, IStepNote<HoldStepNote>
+    public abstract class HoldStepNote : NoteBase
     {
         public event Func<HoldStepNote, LanePotision, TimingPosition, bool> PositionChanging;
 

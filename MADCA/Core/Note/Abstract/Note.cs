@@ -4,7 +4,22 @@ using MADCA.Utility;
 
 namespace MADCA.Core.Note.Abstract
 {
-    public abstract class NoteBase : INote
+    public enum NoteType
+    {
+        Unknown,
+        Touch,
+        Chain,
+        SlideL,
+        SlideR,
+        SnapU,
+        SnapD,
+        HoldBegin,
+        HoldRelay,
+        HoldEnd,
+        Preview
+    }
+
+    public abstract class NoteBase
     {
         public virtual NoteType NoteType => NoteType.Unknown;
 
