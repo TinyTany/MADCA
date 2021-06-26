@@ -39,6 +39,22 @@ namespace MADCA.Core.Data.Tests
         }
 
         [TestMethod()]
+        public void EqualsTest2()
+        {
+            var lhs = new TimingPosition(1, 1);
+            var rhs = new TimingPosition(48, 7);
+            var sub = new TimingPosition(48, 41);
+            //Assert.IsTrue(lhs > rhs);
+            //Assert.IsTrue(lhs >= rhs);
+            //Assert.IsTrue(lhs != rhs);
+            //Assert.IsFalse(lhs < rhs);
+            //Assert.IsFalse(lhs <= rhs);
+            //Assert.IsFalse(lhs == rhs);
+            var calc = lhs - rhs;
+            Assert.IsTrue(lhs - rhs == sub);
+        }
+
+        [TestMethod()]
         public void GetHashCodeTest()
         {
             Assert.Fail();
