@@ -119,11 +119,11 @@ namespace MADCA.Core.Operation
         }
     }
 
-    public class DeleteHoldRelayOperation : Operation
+    public class DeleteHoldStepOperation : Operation
     {
-        private DeleteHoldRelayOperation() { }
+        private DeleteHoldStepOperation() { }
 
-        public DeleteHoldRelayOperation(Hold hold, HoldRelay relay)
+        public DeleteHoldStepOperation(Hold hold, HoldStepNote relay)
         {
             Invoke += () =>
             {

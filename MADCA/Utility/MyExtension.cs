@@ -37,7 +37,14 @@ namespace MADCA.Utility
             return null;
         }
 
-        public static bool Contains(this Rectangle rect, Point p, IReadOnlyEditorLaneEnvironment env)
+        /// <summary>
+        /// X方向で端がつながっているレーン上で見たときに，矩形領域内に座標が含まれているかを判定します
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="p"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
+        public static bool ContainsEx(this Rectangle rect, Point p, IReadOnlyEditorLaneEnvironment env)
         {
             var tmp = rect;
             if (tmp.Contains(p))
@@ -115,6 +122,7 @@ namespace MADCA.Utility
 
             return false;
         }
+
         /// <summary>
         /// Int型の整数を安全にUIntに変換します。
         /// 明示的なキャストは使用しないで下さい
