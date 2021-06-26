@@ -28,11 +28,17 @@ namespace MADCA.UI
             var scoreBook = new ScoreBook();
             for (var i = 0; i < 100; ++i) { scoreBook.AddScoreLast(new Score(4, 4)); }
             pbox.Paint += (s, e) => 
+            display.PictureBox.Paint += (s, e) => 
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                LaneDrawer.Draw(e.Graphics, laneEnv, scoreBook.Scores);
-                PreviewDrawer.Draw(e.Graphics, previewEnv, scoreBook.Scores);
+                // まずレーンを描画
+                LaneDrawer.Draw(e.Graphics, display.EditorLaneEnvironment, scoreBook.Scores);
+                PreviewDrawer.Draw(e.Graphics, display.PreviewDisplayEnvironment, scoreBook.Scores);
+                // 次にレーン上にノーツを描画
+                NoteDrawer.DrawToLane(e.Graphics, display.EditorLaneEnvironment, noteBook);
+                NoteDrawer.DrawToPreview(e.Graphics, display.PreviewDisplayEnvironment, noteBook);
+            };
             };
             {
                 {
@@ -70,10 +76,7 @@ namespace MADCA.UI
                     box.Refresh();
                 }
             };
-            box.Paint += (s, e) =>
             {
-                NoteDrawer.DrawToLane(e.Graphics, laneEnv, note);
-                NoteDrawer.DrawToPreview(e.Graphics, previewEnv, note);
             };
         }
     }
