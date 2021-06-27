@@ -42,7 +42,9 @@ namespace MADCA.Core.Data
         /// <summary>
         /// Timing幅1に対応する画面上でのピクセル数
         /// </summary>
-        uint TimingUnitHeight { get; }
+        int TimingUnitHeight { get; }
+        int TimingUnitHeightMin { get; }
+        int TimingUnitHeightMax { get; }
         /// <summary>
         /// このパネルの描画領域
         /// </summary>
@@ -90,9 +92,32 @@ namespace MADCA.Core.Data
         public uint BottomMargin { get; } = 30;
         
         public uint LaneUnitWidth { get; set; } = 10;
-        
-        public uint TimingUnitHeight { get; set; } = 384;
-        
+
+        private int _timingUnitHeight = 384;
+        public int TimingUnitHeight
+        {
+            get
+            {
+                return _timingUnitHeight;
+            }
+            set
+            {
+                if (value < TimingUnitHeightMin)
+                {
+                    _timingUnitHeight = TimingUnitHeightMin;
+                    return;
+                }
+                if (value > TimingUnitHeightMax)
+                {
+                    _timingUnitHeight = TimingUnitHeightMax;
+                    return;
+                }
+                _timingUnitHeight = value;
+            }
+        }
+        public int TimingUnitHeightMin { get; } = 96;
+        public int TimingUnitHeightMax { get; } = 1536;
+
         public Rectangle PanelRegion { get; set; }
         public Rectangle LaneRect
         {

@@ -56,8 +56,14 @@ namespace MADCA.UI
                 }
                 if (EditorLaneEnvironment.PanelRegion.Contains(e.Location))
                 {
+                    if (Control.ModifierKeys.HasFlag(Keys.Shift))
+                    {
+                        var prevHeight = editorLaneEnvironment.TimingUnitHeight;
+                        editorLaneEnvironment.TimingUnitHeight -= e.Delta / 10;
+                        return;
+                    }
                     editorLaneEnvironment.OffsetY += e.Delta;
-                    previewDisplayEnvironment.TimingOffset = new TimingPosition(editorLaneEnvironment.TimingUnitHeight, editorLaneEnvironment.OffsetY);
+                    previewDisplayEnvironment.TimingOffset = new TimingPosition(editorLaneEnvironment.TimingUnitHeight.ToUInt(), editorLaneEnvironment.OffsetY);
                     return;
                 }
                 if (PreviewDisplayEnvironment.DisplayRegion.Contains(e.Location))
@@ -100,7 +106,7 @@ namespace MADCA.UI
                     if (Math.Abs(diffY) > 10)
                     {
                         editorLaneEnvironment.OffsetY += diffY;
-                        previewDisplayEnvironment.TimingOffset = new TimingPosition(EditorLaneEnvironment.TimingUnitHeight, EditorLaneEnvironment.OffsetY);
+                        previewDisplayEnvironment.TimingOffset = new TimingPosition(EditorLaneEnvironment.TimingUnitHeight.ToUInt(), EditorLaneEnvironment.OffsetY);
                     }
                 }
             };

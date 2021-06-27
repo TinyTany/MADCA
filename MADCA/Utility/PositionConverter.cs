@@ -33,7 +33,7 @@ namespace MADCA.Utility
                 lanePos--;
             }
             var newLanePos = new LanePotision(lanePos);
-            var timing = new TimingPosition(env.TimingUnitHeight, (env.PanelRegion.Height - p.Y) - (int)env.BottomMargin + env.OffsetY);
+            var timing = new TimingPosition(env.TimingUnitHeight.ToUInt(), (env.PanelRegion.Height - p.Y) - (int)env.BottomMargin + env.OffsetY);
             var accum = new TimingPosition(1, 0);
             foreach(var score in scores)
             {

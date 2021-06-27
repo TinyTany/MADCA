@@ -46,8 +46,8 @@ namespace MADCA.Core.Graphics
 
                 // 小節線などを描画
                 if (scores == null) { return; }
-                var offsetTimingMin = new TimingPosition(env.TimingUnitHeight, env.OffsetY);
-                var offsetTimingMax = new TimingPosition(env.TimingUnitHeight, env.OffsetY + env.LaneRect.Height);
+                var offsetTimingMin = new TimingPosition(env.TimingUnitHeight.ToUInt(), env.OffsetY);
+                var offsetTimingMax = new TimingPosition(env.TimingUnitHeight.ToUInt(), env.OffsetY + env.LaneRect.Height);
                 var drawScores = scores.Where(x => !(x.TimingEnd <= offsetTimingMin || offsetTimingMax < x.TimingBegin));
                 foreach(var score in drawScores)
                 {
