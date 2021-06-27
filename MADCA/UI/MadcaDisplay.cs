@@ -62,7 +62,11 @@ namespace MADCA.UI
                 }
                 if (PreviewDisplayEnvironment.DisplayRegion.Contains(e.Location))
                 {
-                    previewDisplayEnvironment.TimingLength -= new TimingPosition((e.Delta / 10).ToUInt(), e.Delta < 0 ? -1 : 1);
+                    var den = (e.Delta / 10).ToUInt();
+                    if (den != 0)
+                    {
+                        previewDisplayEnvironment.TimingLength -= new TimingPosition((e.Delta / 10).ToUInt(), e.Delta < 0 ? -1 : 1);
+                    }
                 }
             };
 
