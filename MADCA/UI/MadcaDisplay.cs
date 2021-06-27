@@ -60,6 +60,7 @@ namespace MADCA.UI
                     {
                         var prevHeight = editorLaneEnvironment.TimingUnitHeight;
                         editorLaneEnvironment.TimingUnitHeight -= e.Delta / 10;
+                        editorLaneEnvironment.OffsetY = (int)(editorLaneEnvironment.TimingUnitHeight / (double)prevHeight * editorLaneEnvironment.OffsetY);
                         return;
                     }
                     editorLaneEnvironment.OffsetY += e.Delta;
