@@ -1,5 +1,7 @@
 ﻿using MADCA.Core.Data;
+using MADCA.Core.Note.Abstract;
 using MADCA.Core.Note.Concrete;
+using MADCA.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -143,6 +145,22 @@ namespace MADCA.Utility
         public static uint ToUInt(this long i)
         {
             return i < 0 ? (uint)-i : (uint)i;
+        }
+
+        public static NoteType ToNoteType(this NoteMode mode)
+        {
+            switch (mode)
+            {
+                case NoteMode.Touch: return NoteType.Touch;
+                case NoteMode.Chain: return NoteType.Chain;
+                case NoteMode.SlideL: return NoteType.SlideL;
+                case NoteMode.SlideR: return NoteType.SlideR;
+                case NoteMode.SnapU: return NoteType.SnapU;
+                case NoteMode.SnapD: return NoteType.SnapD;
+                case NoteMode.Hold: return NoteType.HoldBegin;
+                case NoteMode.HoldRelay: return NoteType.HoldRelay;
+                default: return NoteType.Unknown;
+            }
         }
     }
 }

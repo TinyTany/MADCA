@@ -199,7 +199,6 @@ namespace MADCA.UI
             var previewEnv = display.PreviewDisplayEnvironment;
             var holder = display.KeyTokenHolder;
 
-            // TODO: プレビュー用のノーツにする
             var note = new PreviewNote(new LanePotision(0), new TimingPosition(1, 0), new NoteSize(status.NoteSize));
             bool visible = false;
             box.MouseMove += (s, e) =>
@@ -225,6 +224,7 @@ namespace MADCA.UI
             {
                 if (visible)
                 {
+                    note.SelectedNote = status.NoteMode.ToNoteType();
                     NoteDrawer.DrawToLane(e.Graphics, laneEnv, note);
                     NoteDrawer.DrawToPreview(e.Graphics, previewEnv, note);
                 }

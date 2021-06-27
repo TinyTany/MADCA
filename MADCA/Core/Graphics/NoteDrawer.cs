@@ -17,7 +17,7 @@ namespace MADCA.Core.Graphics
         public static void DrawToLane(System.Drawing.Graphics g, IReadOnlyEditorLaneEnvironment env, NoteBase note)
         {
             // NOTE: お試し実装
-            using (var sb = new SolidBrush(NoteGraphicsGenerator.GetColor(note)))
+            using (var sb = new SolidBrush(NoteGraphicsGenerator.GetColor(note.NoteType)))
             using (var pen = new Pen(Color.White))
             {
                 g.Clip = new Region(env.LaneRect);
@@ -30,6 +30,8 @@ namespace MADCA.Core.Graphics
                 {
                     g.FillRectangle(sb, rect);
                 }
+                DrawToLanePreviewNoteFrame(g, rect, note as PreviewNote);
+                // 水平位置を1周分ずらしてもう一回描画
                 rect.X -= (int)(MadcaEnv.LaneCount * env.LaneUnitWidth);
                 if (note.NoteType == NoteType.HoldRelay)
                 {
@@ -39,7 +41,20 @@ namespace MADCA.Core.Graphics
                 {
                     g.FillRectangle(sb, rect);
                 }
+                DrawToLanePreviewNoteFrame(g, rect, note as PreviewNote);
                 g.ResetClip();
+            }
+        }
+
+        private static void DrawToLanePreviewNoteFrame(System.Drawing.Graphics g, Rectangle rect, PreviewNote note)
+        {
+            if (note == null)
+            {
+                return;
+            }
+            using(var pen = new Pen(NoteGraphicsGenerator.GetColor(note.SelectedNote)))
+            {
+                g.DrawRectangle(pen, rect);
             }
         }
 
@@ -99,7 +114,7 @@ namespace MADCA.Core.Graphics
             var lane1 = note.Lane.NormalizedLane;
             float startDeg = CalcCsDeg(6 * lane1);
             float degSize = CalcCsDegSize(6 * note.NoteSize.Size);
-            using(var p = new Pen(NoteGraphicsGenerator.GetColor(note), 5))
+            using(var p = new Pen(NoteGraphicsGenerator.GetColor(note.NoteType), 5))
             {
                 r *= env.Radius;
                 g.DrawArc(p, env.CenterPoint.X - r, env.CenterPoint.Y - r, 2 * r, 2 * r, startDeg, degSize);
@@ -251,9 +266,9 @@ namespace MADCA.Core.Graphics
         // SnapU (190, 0, 0)
         // SnapD (20, 140, 220)
         // Hold 手前 (200, 200, 130) 奥 (200, 150, 50)
-        public static Color GetColor(NoteBase note)
+        public static Color GetColor(NoteType type)
         {
-            switch (note.NoteType)
+            switch (type)
             {
                 case NoteType.Touch:
                     return Color.FromArgb(250, 10, 180);

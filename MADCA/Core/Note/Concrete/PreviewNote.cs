@@ -6,6 +6,7 @@ namespace MADCA.Core.Note.Concrete
     public sealed class PreviewNote : ShortNote
     {
         public override NoteType NoteType => NoteType.Preview;
+        public NoteType SelectedNote { get; set; } = NoteType.Unknown;
 
         private PreviewNote() { }
 
