@@ -100,9 +100,6 @@ namespace MADCA.Core.Graphics
                     catch (Exception) { }
                 }
                 g.ResetClip();
-                matToLeft.Dispose();
-                matToRight.Dispose();
-                matToReset.Dispose();
             }
         }
 
@@ -170,12 +167,12 @@ namespace MADCA.Core.Graphics
             {
                 if (curR <= 0 || curR <= rend) { break; }
 
-                if (dlleft != 0)
+                if (dlleft != 0 || curR <= step)
                 {
                     var radLeft = MyMath.DegToRad(CalcCsDeg((float)(begin.Lane.RawLane * 6 + (rbegin - curR) / dr * dlleft * 6)));
                     psLeft.Add(new Point((int)(env.CenterPoint.X + curR * Math.Cos(radLeft)), (int)(env.CenterPoint.Y + curR * Math.Sin(radLeft))));
                 }
-                if (dlright != 0)
+                if (dlright != 0 || curR <= step)
                 {
                     var radRight = MyMath.DegToRad(CalcCsDeg((float)((begin.Lane.RawLane + begin.NoteSize.Size) * 6 + (rbegin - curR) / dr * dlright * 6)));
                     psRight.Add(new Point((int)(env.CenterPoint.X + curR * Math.Cos(radRight)), (int)(env.CenterPoint.Y + curR * Math.Sin(radRight))));
@@ -184,11 +181,10 @@ namespace MADCA.Core.Graphics
             }
 
             var path = new GraphicsPath();
-            for(var i = 0; i < psLeft.Count - 1; ++i)
+            if (psLeft.Any())
             {
-                path.AddLine(psLeft[i], psLeft[i + 1]);
+                path.AddLines(psLeft.ToArray());
             }
-
             if (rend > 0) {
                 path.AddArc(
                 (float)(env.CenterPoint.X - rend),
@@ -198,9 +194,9 @@ namespace MADCA.Core.Graphics
                 CalcCsDeg(end.Lane.NormalizedLane * 6),
                 CalcCsDegSize(end.NoteSize.Size * 6));
             }
-            for(var i = psRight.Count - 1; i > 0; --i)
+            if (psRight.Any())
             {
-                path.AddLine(psRight[i], psRight[i - 1]);
+                path.AddLines(psRight.Reverse<Point>().ToArray());
             }
             if (rbegin > 0) {
                 path.AddArc(
