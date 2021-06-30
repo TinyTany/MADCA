@@ -18,8 +18,8 @@ namespace MADCA.Utility
         /// <param name="beat">拍数のストライド</param>
         /// <param name="scores"></param>
         /// <param name="position">計算された仮想座標</param>
-        /// <returns></returns>
-        public static bool ConvertRealToVirtual(IReadOnlyEditorLaneEnvironment env, Point p, uint beat, IReadOnlyList<IReadOnlyScore> scores, out Position position)
+        /// <returns>仮想座標の計算に成功したかどうか</returns>
+        public static bool ConvertRealToVirtual(IReadOnlyEditorLaneEnvironment env, Point p, TimingPosition beat, IReadOnlyList<IReadOnlyScore> scores, out Position position)
         {
             p = new Point(p.X - env.PanelRegion.X, p.Y - env.PanelRegion.Y);
             position = null;
@@ -41,8 +41,8 @@ namespace MADCA.Utility
                 if (timing < tmp + accum) { break; }
                 accum += tmp;
             }
-            var cnt = (int)Math.Floor(((timing - accum) / new TimingPosition(beat, 1)).BarRatio);
-            var newTimingPos = new TimingPosition(beat, cnt) + accum;
+            var cnt = (int)Math.Floor(((timing - accum) / beat).BarRatio);
+            var newTimingPos = new TimingPosition(beat.DivValue, cnt) + accum;
             position = new Position(newLanePos, newTimingPos);
             return true;
         }
