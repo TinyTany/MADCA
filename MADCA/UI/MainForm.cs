@@ -75,10 +75,27 @@ namespace MADCA.UI
             // 分数指定用ComboBoxの設定
             var beatStride = new List<uint>() { 4, 8, 12, 16, 24, 32, 48, 64 };
             tscbBeat.Items.AddRange(beatStride.Select(x => $"1 / {x}").ToArray());
-            // TODO: そのうちカスタム分数も指定できるようにしたい
-            // tscbBeat.Items.Add("カスタム...");
+            tscbBeat.Items.Add("カスタム...");
             tscbBeat.SelectedIndexChanged += (s, e) =>
             {
+                if (tscbBeat.SelectedIndex == tscbBeat.Items.Count - 1)
+                {
+                    using (var dialog = new BeatStrideDialog())
+                    {
+                        dialog.BeatStrideConfirmed += (_, t) =>
+                        {
+                            status.BeatStride = t;
+                            // 反映されない...
+                            tscbBeat.Text = $"{t.CntValue} / {t.DivValue}";
+                        };
+                        dialog.ShowDialog();
+                    }
+                    return;
+                }
+                if (tscbBeat.SelectedIndex < 0 || tscbBeat.SelectedIndex >= beatStride.Count)
+                { 
+                    return; 
+                }
                 status.BeatStride = new TimingPosition(beatStride[tscbBeat.SelectedIndex], 1);
             };
             tscbBeat.SelectedIndex = 0;

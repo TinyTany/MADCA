@@ -92,6 +92,12 @@
     <Compile Include="Core\Operation\OperationManager.cs" />
     <Compile Include="Core\Score\Score.cs" />
     <Compile Include="Core\Score\ScoreBook.cs" />
+    <Compile Include="UI\BeatStrideDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BeatStrideDialog.Designer.cs">
+      <DependentUpon>BeatStrideDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MadcaDisplay.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
@@ -114,6 +120,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\BeatStrideDialog.resx">
+      <DependentUpon>BeatStrideDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
