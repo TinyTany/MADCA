@@ -147,6 +147,17 @@ namespace MADCA.Utility
             return i < 0 ? (uint)-i : (uint)i;
         }
 
+        /// <summary>
+        /// Decimal型の整数を安全にUIntに変換します。
+        /// 明示的なキャストは使用しないで下さい
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static uint ToUInt(this decimal i)
+        {
+            return i < 0 ? (uint)-i : (uint)i;
+        }
+
         public static NoteType ToNoteType(this NoteMode mode)
         {
             switch (mode)
