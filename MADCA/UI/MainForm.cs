@@ -38,7 +38,7 @@ namespace MADCA.UI
             var scoreBook = fumen.ScoreBook;
             var noteBook = fumen.NoteBook;
             var operationManager = new OperationManager();
-            var status = new EditorStatus(EditorMode.Add, NoteMode.Touch, 8, 8);
+            var status = new EditorStatus(EditorMode.Add, NoteMode.Touch, 8, new TimingPosition(8, 1));
             for (var i = 0; i < 100; ++i) { scoreBook.AddScoreLast(new Score(4, 4)); }
 
             SetEditorMode(EditorMode.Add, status);
@@ -71,6 +71,17 @@ namespace MADCA.UI
             tsbHold.Click += (s, e) => SetNoteMode(NoteMode.Hold, status);
             tsbHoldStep.Click += (s, e) => SetNoteMode(NoteMode.HoldRelay, status);
             tsbField.Click += (s, e) => SetNoteMode(NoteMode.Field, status);
+
+            // 分数指定用ComboBoxの設定
+            var beatStride = new List<uint>() { 4, 8, 12, 16, 24, 32, 48, 64 };
+            tscbBeat.Items.AddRange(beatStride.Select(x => $"1 / {x}").ToArray());
+            // TODO: そのうちカスタム分数も指定できるようにしたい
+            // tscbBeat.Items.Add("カスタム...");
+            tscbBeat.SelectedIndexChanged += (s, e) =>
+            {
+                status.BeatStride = new TimingPosition(beatStride[tscbBeat.SelectedIndex], 1);
+            };
+            tscbBeat.SelectedIndex = 0;
 
 #if DEBUG
             var time = new Stopwatch();
@@ -212,8 +223,11 @@ namespace MADCA.UI
                 if (area == EditorLaneRegion.Lane)
                 {
                     visible = true;
-                    PositionConverter.ConvertRealToVirtual(laneEnv, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
-                    note.ReLocate(position.Lane, position.Timing);
+                    var res = PositionConverter.ConvertRealToVirtual(laneEnv, e.Location, status.BeatStride, scores, out Position position);
+                    if (res)
+                    {
+                        note.ReLocate(position.Lane, position.Timing);
+                    }
                 }
                 else
                 {
@@ -243,7 +257,6 @@ namespace MADCA.UI
                 var area = laneEnv.GetEditorLaneRegion(e.Location);
                 if (area == EditorLaneRegion.Lane && e.Button == MouseButtons.Left)
                 {
-                    var res = PositionConverter.ConvertRealToVirtual(laneEnv, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
                     if (!res) { return; }
                     var note = MyUtil.NoteFactory(position.Lane, position.Timing, new NoteSize(status.NoteSize), status.NoteMode);
                     if (note is null) { return; } // HACK: この辺の処理どうしようかな
@@ -268,9 +281,9 @@ namespace MADCA.UI
                 var area = env.GetEditorLaneRegion(e.Location);
                 if (area == EditorLaneRegion.Lane && e.Button == MouseButtons.Left)
                 {
-                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
+                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
                     if (!res) { return; }
-                    var hold = new Hold(position.Lane, position.Timing, position.Timing + new TimingPosition(status.BeatStride.ToUInt(), 1), new NoteSize(status.NoteSize));
+                    var hold = new Hold(position.Lane, position.Timing, position.Timing + status.BeatStride, new NoteSize(status.NoteSize));
                     end = hold.HoldEnd;
                     opManager.AddAndInvokeOperation(new AddHoldOperation(noteBook, hold));
                     holder.Lock(key);
@@ -280,7 +293,7 @@ namespace MADCA.UI
             box.MouseMove += (s, e) =>
             {
                 if (!holder.CanUnLock(key)) { return; }
-                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
+                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
                 if (!res) { return; }
                 end.ReLocate(position.Lane, position.Timing);
             };
@@ -318,7 +331,7 @@ namespace MADCA.UI
                         }
                     }
                     if (hold == null) { return; }
-                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
+                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
                     if (!res) { return; }
                     relay = new HoldRelay(position.Lane, position.Timing, new NoteSize(status.NoteSize));
                     opManager.AddAndInvokeOperation(new AddHoldRelayOperation(hold, relay));
@@ -329,7 +342,7 @@ namespace MADCA.UI
             box.MouseMove += (s, e) =>
             {
                 if (!holder.CanUnLock(key)) { return; }
-                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
+                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
                 if (!res) { return; }
                 relay.ReLocate(position.Lane, position.Timing);
             };
@@ -375,7 +388,11 @@ namespace MADCA.UI
                         }
                     }
                     prev = new Position(note.Lane, note.Timing);
-                    PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out mouseBegin);
+                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out mouseBegin);
+                    if (!res)
+                    {
+                        return;
+                    }
                     holder.Lock(key);
                 }
             };
@@ -383,7 +400,7 @@ namespace MADCA.UI
             box.MouseMove += (s, e) =>
             {
                 if (!holder.CanUnLock(key)) { return; }
-                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride.ToUInt(), scores, out Position position);
+                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
                 if (!res) { return; }
                 var lane = position.Lane.RawLane - mouseBegin.Lane.RawLane;
                 var timing = position.Timing - mouseBegin.Timing;
@@ -459,7 +476,7 @@ namespace MADCA.UI
         EditorMode EditorMode { get; }
         NoteMode NoteMode { get; }
         int NoteSize { get; }
-        int BeatStride { get; }
+        TimingPosition BeatStride { get; }
     }
 
     public class EditorStatus : IReadOnlyEditorStatus
@@ -467,10 +484,10 @@ namespace MADCA.UI
         public EditorMode EditorMode { get; set; }
         public NoteMode NoteMode { get; set; }
         public int NoteSize { get; set; }
-        public int BeatStride { get; set; }
+        public TimingPosition BeatStride { get; set; }
 
         private EditorStatus() { }
-        public EditorStatus(EditorMode edit, NoteMode note, int size, int beat)
+        public EditorStatus(EditorMode edit, NoteMode note, int size, TimingPosition beat)
         {
             EditorMode = edit;
             NoteMode = note;
