@@ -257,6 +257,7 @@ namespace MADCA.UI
                 var area = laneEnv.GetEditorLaneRegion(e.Location);
                 if (area == EditorLaneRegion.Lane && e.Button == MouseButtons.Left)
                 {
+                    var res = PositionConverter.ConvertRealToVirtual(laneEnv, e.Location, status.BeatStride, scores, out Position position);
                     if (!res) { return; }
                     var note = MyUtil.NoteFactory(position.Lane, position.Timing, new NoteSize(status.NoteSize), status.NoteMode);
                     if (note is null) { return; } // HACK: この辺の処理どうしようかな
