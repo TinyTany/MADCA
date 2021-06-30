@@ -34,20 +34,21 @@
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbNew = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpen = new System.Windows.Forms.ToolStripButton();
+            this.tsbSave = new System.Windows.Forms.ToolStripButton();
+            this.tsbExport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
+            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAdd = new System.Windows.Forms.ToolStripButton();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.tsbDelete = new System.Windows.Forms.ToolStripButton();
-            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
-            this.tsbExport = new System.Windows.Forms.ToolStripButton();
-            this.tsbSave = new System.Windows.Forms.ToolStripButton();
-            this.tsbNew = new System.Windows.Forms.ToolStripButton();
-            this.tsbOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslBeat = new System.Windows.Forms.ToolStripLabel();
+            this.tscbBeat = new System.Windows.Forms.ToolStripComboBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.tsbField = new System.Windows.Forms.ToolStripButton();
-            this.tsbHoldStep = new System.Windows.Forms.ToolStripButton();
             this.tsbTouch = new System.Windows.Forms.ToolStripButton();
             this.tsbChain = new System.Windows.Forms.ToolStripButton();
             this.tsbSlideL = new System.Windows.Forms.ToolStripButton();
@@ -55,6 +56,8 @@
             this.tsbSnapU = new System.Windows.Forms.ToolStripButton();
             this.tsbSnapD = new System.Windows.Forms.ToolStripButton();
             this.tsbHold = new System.Windows.Forms.ToolStripButton();
+            this.tsbHoldStep = new System.Windows.Forms.ToolStripButton();
+            this.tsbField = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.menuStrip.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -85,14 +88,14 @@
             // 
             this.tsmiOpen.Name = "tsmiOpen";
             this.tsmiOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiOpen.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOpen.Size = new System.Drawing.Size(161, 22);
             this.tsmiOpen.Text = "開く(&O)...";
             // 
             // tsmiQuit
             // 
             this.tsmiQuit.Name = "tsmiQuit";
             this.tsmiQuit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.tsmiQuit.Size = new System.Drawing.Size(180, 22);
+            this.tsmiQuit.Size = new System.Drawing.Size(161, 22);
             this.tsmiQuit.Text = "終了(&Q)";
             // 
             // toolStrip1
@@ -108,12 +111,74 @@
             this.toolStripSeparator1,
             this.tsbAdd,
             this.tsbEdit,
-            this.tsbDelete});
+            this.tsbDelete,
+            this.toolStripSeparator3,
+            this.tslBeat,
+            this.tscbBeat});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1634, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbNew
+            // 
+            this.tsbNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbNew.Image = ((System.Drawing.Image)(resources.GetObject("tsbNew.Image")));
+            this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbNew.Name = "tsbNew";
+            this.tsbNew.Size = new System.Drawing.Size(35, 22);
+            this.tsbNew.Text = "New";
+            // 
+            // tsbOpen
+            // 
+            this.tsbOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
+            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpen.Name = "tsbOpen";
+            this.tsbOpen.Size = new System.Drawing.Size(40, 22);
+            this.tsbOpen.Text = "Open";
+            // 
+            // tsbSave
+            // 
+            this.tsbSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
+            this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSave.Name = "tsbSave";
+            this.tsbSave.Size = new System.Drawing.Size(35, 22);
+            this.tsbSave.Text = "Save";
+            // 
+            // tsbExport
+            // 
+            this.tsbExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbExport.Image = ((System.Drawing.Image)(resources.GetObject("tsbExport.Image")));
+            this.tsbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbExport.Name = "tsbExport";
+            this.tsbExport.Size = new System.Drawing.Size(45, 22);
+            this.tsbExport.Text = "Export";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbUndo
+            // 
+            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
+            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndo.Name = "tsbUndo";
+            this.tsbUndo.Size = new System.Drawing.Size(40, 22);
+            this.tsbUndo.Text = "Undo";
+            // 
+            // tsbRedo
+            // 
+            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
+            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRedo.Name = "tsbRedo";
+            this.tsbRedo.Size = new System.Drawing.Size(38, 22);
+            this.tsbRedo.Text = "Redo";
             // 
             // toolStripSeparator1
             // 
@@ -147,64 +212,25 @@
             this.tsbDelete.Size = new System.Drawing.Size(44, 22);
             this.tsbDelete.Text = "Delete";
             // 
-            // tsbRedo
+            // toolStripSeparator3
             // 
-            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
-            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRedo.Name = "tsbRedo";
-            this.tsbRedo.Size = new System.Drawing.Size(38, 22);
-            this.tsbRedo.Text = "Redo";
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripSeparator2
+            // tslBeat
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.tslBeat.Name = "tslBeat";
+            this.tslBeat.Size = new System.Drawing.Size(30, 22);
+            this.tslBeat.Text = "Beat";
             // 
-            // tsbUndo
+            // tscbBeat
             // 
-            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
-            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbUndo.Name = "tsbUndo";
-            this.tsbUndo.Size = new System.Drawing.Size(40, 22);
-            this.tsbUndo.Text = "Undo";
-            // 
-            // tsbExport
-            // 
-            this.tsbExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbExport.Image = ((System.Drawing.Image)(resources.GetObject("tsbExport.Image")));
-            this.tsbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbExport.Name = "tsbExport";
-            this.tsbExport.Size = new System.Drawing.Size(45, 22);
-            this.tsbExport.Text = "Export";
-            // 
-            // tsbSave
-            // 
-            this.tsbSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
-            this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbSave.Name = "tsbSave";
-            this.tsbSave.Size = new System.Drawing.Size(35, 22);
-            this.tsbSave.Text = "Save";
-            // 
-            // tsbNew
-            // 
-            this.tsbNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbNew.Image = ((System.Drawing.Image)(resources.GetObject("tsbNew.Image")));
-            this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbNew.Name = "tsbNew";
-            this.tsbNew.Size = new System.Drawing.Size(35, 22);
-            this.tsbNew.Text = "New";
-            // 
-            // tsbOpen
-            // 
-            this.tsbOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
-            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOpen.Name = "tsbOpen";
-            this.tsbOpen.Size = new System.Drawing.Size(40, 22);
-            this.tsbOpen.Text = "Open";
+            this.tscbBeat.AutoSize = false;
+            this.tscbBeat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tscbBeat.DropDownWidth = 60;
+            this.tscbBeat.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.tscbBeat.Name = "tscbBeat";
+            this.tscbBeat.Size = new System.Drawing.Size(60, 23);
             // 
             // toolStrip2
             // 
@@ -224,24 +250,6 @@
             this.toolStrip2.Size = new System.Drawing.Size(1634, 25);
             this.toolStrip2.TabIndex = 2;
             this.toolStrip2.Text = "toolStrip2";
-            // 
-            // tsbField
-            // 
-            this.tsbField.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbField.Image = ((System.Drawing.Image)(resources.GetObject("tsbField.Image")));
-            this.tsbField.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbField.Name = "tsbField";
-            this.tsbField.Size = new System.Drawing.Size(36, 22);
-            this.tsbField.Text = "Field";
-            // 
-            // tsbHoldStep
-            // 
-            this.tsbHoldStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbHoldStep.Image = ((System.Drawing.Image)(resources.GetObject("tsbHoldStep.Image")));
-            this.tsbHoldStep.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbHoldStep.Name = "tsbHoldStep";
-            this.tsbHoldStep.Size = new System.Drawing.Size(60, 22);
-            this.tsbHoldStep.Text = "HoldStep";
             // 
             // tsbTouch
             // 
@@ -306,6 +314,24 @@
             this.tsbHold.Size = new System.Drawing.Size(37, 22);
             this.tsbHold.Text = "Hold";
             // 
+            // tsbHoldStep
+            // 
+            this.tsbHoldStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbHoldStep.Image = ((System.Drawing.Image)(resources.GetObject("tsbHoldStep.Image")));
+            this.tsbHoldStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbHoldStep.Name = "tsbHoldStep";
+            this.tsbHoldStep.Size = new System.Drawing.Size(60, 22);
+            this.tsbHoldStep.Text = "HoldStep";
+            // 
+            // tsbField
+            // 
+            this.tsbField.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbField.Image = ((System.Drawing.Image)(resources.GetObject("tsbField.Image")));
+            this.tsbField.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbField.Name = "tsbField";
+            this.tsbField.Size = new System.Drawing.Size(36, 22);
+            this.tsbField.Text = "Field";
+            // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
@@ -320,6 +346,7 @@
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip);
+            this.Cursor = System.Windows.Forms.Cursors.Default;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.menuStrip.ResumeLayout(false);
@@ -362,5 +389,8 @@
         private System.Windows.Forms.ToolStripButton tsbHold;
         private System.Windows.Forms.ToolStripButton tsbHoldStep;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripComboBox tscbBeat;
+        private System.Windows.Forms.ToolStripLabel tslBeat;
     }
 }
