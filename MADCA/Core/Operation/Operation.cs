@@ -6,9 +6,34 @@ using MADCA.Core.Note.Concrete;
 
 namespace MADCA.Core.Operation
 {
+    // インタフェースにした方がいいかなあ
     public abstract class Operation
     {
         public Action Invoke, Undo;
+    }
+
+    public class CompositeOperation : Operation
+    {
+        private CompositeOperation() { }
+
+        public CompositeOperation(params Operation[] operations)
+        {
+            Invoke = () =>
+            {
+                for (var i = 0; i < operations.Length; ++i)
+                {
+                    operations[i].Invoke();
+                }
+            };
+
+            Undo = () =>
+            {
+                for (var i = 0; i < operations.Length; ++i)
+                {
+                    operations[i].Undo();
+                }
+            };
+        }
     }
 
     public class AddShortNoteOperation : Operation
@@ -61,6 +86,24 @@ namespace MADCA.Core.Operation
             Undo = () =>
             {
                 note.ReLocate(before.Lane, before.Timing);
+            };
+        }
+    }
+
+    public class ReSizeNoteOperation : Operation
+    {
+        private ReSizeNoteOperation() { }
+
+        public ReSizeNoteOperation(NoteBase note, NoteSize before, NoteSize after)
+        {
+            Invoke = () =>
+            {
+                note.ReSize(after);
+            };
+
+            Undo = () =>
+            {
+                note.ReSize(before);
             };
         }
     }
