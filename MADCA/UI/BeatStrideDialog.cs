@@ -20,7 +20,7 @@ namespace MADCA.UI
             InitializeComponent();
             bOK.Click += (s, e) =>
             {
-                BeatStrideConfirmed.Invoke(this, new TimingPosition(nudBeatStride.Value.ToUInt(), 1));
+                BeatStrideConfirmed.Invoke(this, new TimingPosition(nudBeatStride.Value.ToUInt() * 4, 1));
                 Close();
             };
             bCancel.Click += (s, e) =>

@@ -61,11 +61,11 @@ namespace MADCA.UI
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.Location = new System.Drawing.Point(53, 35);
+            this.label1.Location = new System.Drawing.Point(41, 35);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 15);
+            this.label1.Size = new System.Drawing.Size(58, 15);
             this.label1.TabIndex = 2;
-            this.label1.Text = "1小節を";
+            this.label1.Text = "4分音符を";
             // 
             // label2
             // 
