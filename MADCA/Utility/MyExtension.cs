@@ -57,6 +57,37 @@ namespace MADCA.Utility
             return tmp.Contains(p);
         }
 
+        public static SelectedNoteArea SelectedNoteArea(this NoteBase note, Point p, IReadOnlyEditorLaneEnvironment env)
+        {
+            var cr = note.NoteSize.Size - 2;
+            var areaRatio = (lr: 1, cr: cr <= 0 ? 0 : cr, rr: 1 );
+            var rect = note.GetRectangle(env);
+            // 実装微妙かも
+            Func<SelectedNoteArea> fun = () =>
+            {
+                var areaSum = areaRatio.lr + areaRatio.cr + areaRatio.rr;
+                if (p.X < rect.X + rect.Width * areaRatio.lr / areaSum)
+                {
+                    return UI.SelectedNoteArea.Left;
+                }
+                if (p.X < rect.X + rect.Width * (areaRatio.lr + areaRatio.cr) / areaSum)
+                {
+                    return UI.SelectedNoteArea.Center;
+                }
+                return UI.SelectedNoteArea.Right;
+            };
+            if (rect.Contains(p))
+            {
+                return fun();
+            }
+            rect.X -= (int)(env.LaneUnitWidth * MadcaEnv.LaneCount);
+            if (rect.Contains(p))
+            {
+                return fun();
+            }
+            return UI.SelectedNoteArea.None;
+        }
+
         public static Point GetLeftMiddle(this Rectangle rect)
         {
             return new Point(rect.Left, rect.Top + rect.Height / 2);

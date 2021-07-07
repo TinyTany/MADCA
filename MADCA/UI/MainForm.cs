@@ -26,6 +26,11 @@ namespace MADCA.UI
         Touch, Chain, SlideL, SlideR, SnapU, SnapD, Hold, HoldRelay, Field, Bpm, Speed
     }
 
+    public enum SelectedNoteArea
+    {
+        None, Left, Center, Right
+    }
+
     public partial class MainForm : Form
     {
         private readonly string appName = "MADCA";
@@ -85,7 +90,7 @@ namespace MADCA.UI
                         dialog.BeatStrideConfirmed += (_, t) =>
                         {
                             status.BeatStride = t;
-                            // 反映されない...
+                            // 反映されない...（すでに存在するものの場合は反映された）
                             tscbBeat.Text = $"{t.CntValue} / {t.DivValue}";
                         };
                         dialog.ShowDialog();
@@ -126,7 +131,8 @@ namespace MADCA.UI
             SetEventToPutNote(display, noteBook, scoreBook.Scores, operationManager, status);
             SetEventToPutHold(display, noteBook, scoreBook.Scores, operationManager, status);
             SetEventToPutHoldRelay(display, noteBook, scoreBook.Scores, operationManager, status);
-            SetEventToEditNote(display, noteBook, scoreBook.Scores, operationManager, status);
+            SetEventToReLocateNote(display, noteBook, scoreBook.Scores, operationManager, status);
+            SetEventToReSizeNote(display, noteBook, scoreBook.Scores, operationManager, status);
             SetEventToDeleteNote(display, noteBook, operationManager, status);
             SetEventToDrawPreviewNote(display, scoreBook.Scores, status);
             SetEventForRefreshRule(display); // 各種SetEvent関数の最後に置く
@@ -372,7 +378,29 @@ namespace MADCA.UI
             };
         }
 
-        private static void SetEventToEditNote(
+        private static bool GetSelectedNote(Point p, MadcaDisplay display, NoteBook noteBook, out NoteBase note)
+        {
+            var env = display.EditorLaneEnvironment;
+            note = noteBook.Notes.FindLast(x => x.GetRectangle(env).ContainsEx(p, env));
+            if (note == null)
+            {
+                foreach (var hold in noteBook.Holds.Reverse())
+                {
+                    note = hold.AllNotes.Find(x => x.GetRectangle(env).ContainsEx(p, env));
+                    if (note != null)
+                    {
+                        break;
+                    }
+                }
+                if (note == null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static void SetEventToReLocateNote(
             MadcaDisplay display, NoteBook noteBook, IReadOnlyList<IReadOnlyScore> scores, OperationManager opManager, IReadOnlyEditorStatus status)
         {
             var box = display.PictureBox;
@@ -389,21 +417,13 @@ namespace MADCA.UI
                 var area = env.GetEditorLaneRegion(e.Location);
                 if (area == EditorLaneRegion.Lane && e.Button == MouseButtons.Left)
                 {
-                    note = noteBook.Notes.FindLast(x => x.GetRectangle(env).ContainsEx(e.Location, env));
-                    if (note == null)
+                    if (!GetSelectedNote(e.Location, display, noteBook, out note))
                     {
-                        foreach(var hold in noteBook.Holds.Reverse())
-                        {
-                            note = hold.AllNotes.Find(x => x.GetRectangle(env).ContainsEx(e.Location, env));
-                            if (note != null)
-                            {
-                                break;
-                            }
-                        }
-                        if (note == null)
-                        {
-                            return;
-                        }
+                        return;
+                    }
+                    if (note.SelectedNoteArea(e.Location, env) != SelectedNoteArea.Center)
+                    {
+                        return;
                     }
                     prev = new Position(note.Lane, note.Timing);
                     var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out mouseBegin);
@@ -432,6 +452,93 @@ namespace MADCA.UI
                 if (prev.Lane.RawLane != note.Lane.RawLane || prev.Timing != note.Timing)
                 {
                     opManager.AddOperation(new ReLocateNoteOperation(note, prev, new Position(note.Lane, note.Timing)));
+                }
+                note = null;
+            };
+        }
+
+        private static void SetEventToReSizeNote(
+            MadcaDisplay display, NoteBook noteBook, IReadOnlyList<IReadOnlyScore> scores, OperationManager opManager, IReadOnlyEditorStatus status)
+        {
+            var box = display.PictureBox;
+            var env = display.EditorLaneEnvironment;
+            var holder = display.KeyTokenHolder;
+
+            var key = new KeyToken();
+            NoteBase note = null;
+            Position prevPos = null;
+            NoteSize prevSize = null;
+            Position mouseBegin = null;
+            SelectedNoteArea noteArea = SelectedNoteArea.None;
+            box.MouseDown += (s, e) =>
+            {
+                if (holder.Locked || status.EditorMode != EditorMode.Edit) { return; }
+                var area = env.GetEditorLaneRegion(e.Location);
+                if (area == EditorLaneRegion.Lane && e.Button == MouseButtons.Left)
+                {
+                    if (!GetSelectedNote(e.Location, display, noteBook, out note))
+                    {
+                        return;
+                    }
+                    noteArea = note.SelectedNoteArea(e.Location, env);
+                    if (!(noteArea == SelectedNoteArea.Left || noteArea == SelectedNoteArea.Right))
+                    {
+                        return;
+                    }
+                    prevPos = new Position(note.Lane, note.Timing);
+                    prevSize = new NoteSize(note.NoteSize);
+                    var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out mouseBegin);
+                    if (!res)
+                    {
+                        return;
+                    }
+                    holder.Lock(key);
+                }
+            };
+
+            box.MouseMove += (s, e) =>
+            {
+                if (!holder.CanUnLock(key)) { return; }
+                var res = PositionConverter.ConvertRealToVirtual(env, e.Location, status.BeatStride, scores, out Position position);
+                if (!res) { return; }
+                var lane = position.Lane.RawLane - mouseBegin.Lane.RawLane;
+                switch (noteArea)
+                {
+                    case SelectedNoteArea.Left:
+                        {
+                            var diff = prevSize.Size - lane;
+                            if (1 <= diff && diff <= MadcaEnv.LaneCount)
+                            {
+                                note.ReLocate(new LanePotision(prevPos.Lane.RawLane + lane), note.Timing);
+                            }
+                            note.ReSize(new NoteSize(prevSize.Size - lane));
+                            return;
+                        }
+                    case SelectedNoteArea.Right:
+                        {
+                            note.ReSize(new NoteSize(prevSize.Size + lane));
+                            return;
+                        }
+                    default: return;
+                }
+            };
+
+            box.MouseUp += (s, e) =>
+            {
+                if (!holder.UnLock(key)) { return; }
+                var ops = new List<Operation>();
+                // TODO: 条件式要検討
+                if (prevPos.Lane.RawLane != note.Lane.RawLane || prevPos.Timing != note.Timing)
+                {
+                    ops.Add(new ReLocateNoteOperation(note, prevPos, new Position(note.Lane, note.Timing)));
+                }
+                if (prevSize != note.NoteSize)
+                {
+                    ops.Add(new ReSizeNoteOperation(note, prevSize, note.NoteSize));
+                }
+                if (ops.Any())
+                {
+                    opManager.AddOperation(new CompositeOperation(ops.ToArray()));
                 }
                 note = null;
             };
