@@ -128,6 +128,7 @@ namespace MADCA.UI
             Controls.Add(display.PictureBox);
             MinimumSize = new Size((int)display.EditorLaneEnvironment.SideMargin * 2, 10);
 
+            SetEventToSetCursor(display, noteBook, status);
             SetEventToPutNote(display, noteBook, scoreBook.Scores, operationManager, status);
             SetEventToPutHold(display, noteBook, scoreBook.Scores, operationManager, status);
             SetEventToPutHoldRelay(display, noteBook, scoreBook.Scores, operationManager, status);
@@ -541,6 +542,37 @@ namespace MADCA.UI
                     opManager.AddOperation(new CompositeOperation(ops.ToArray()));
                 }
                 note = null;
+            };
+        }
+
+        private static void SetEventToSetCursor(MadcaDisplay display, NoteBook noteBook, IReadOnlyEditorStatus status)
+        {
+            var box = display.PictureBox;
+            var env = display.EditorLaneEnvironment;
+            box.MouseMove += (s, e) =>
+            {
+                if (status.EditorMode != EditorMode.Edit)
+                {
+                    box.Cursor = Cursors.Default;
+                    return;
+                }
+                if (!GetSelectedNote(e.Location, display, noteBook, out var note))
+                {
+                    box.Cursor = Cursors.Default;
+                    return;
+                }
+                var area = note.SelectedNoteArea(e.Location, env);
+                if (area == SelectedNoteArea.Left || area == SelectedNoteArea.Right)
+                {
+                    box.Cursor = Cursors.SizeWE;
+                    return;
+                }
+                if (area == SelectedNoteArea.Center)
+                {
+                    box.Cursor = Cursors.SizeAll;
+                    return;
+                }
+                box.Cursor = Cursors.Default;
             };
         }
 
