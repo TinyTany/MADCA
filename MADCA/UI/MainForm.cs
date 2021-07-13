@@ -46,6 +46,10 @@ namespace MADCA.UI
             var status = new EditorStatus(EditorMode.Add, NoteMode.Touch, 8, new TimingPosition(8, 1));
             for (var i = 0; i < 100; ++i) { scoreBook.AddScoreLast(new Score(4, 4)); }
 
+            // スクロールバーのための初期設定（ちょっと雑実装？）
+            display.VScrollBar.Maximum = (int)(scoreBook.Size.BarRatio * display.EditorLaneEnvironment.TimingUnitHeight);
+            display.VScrollBar.Value = display.VScrollBar.Maximum;
+
             SetEditorMode(EditorMode.Add, status);
             tsbAdd.Click += (s, e) => SetEditorMode(EditorMode.Add, status);
             tsbEdit.Click += (s, e) => SetEditorMode(EditorMode.Edit, status);

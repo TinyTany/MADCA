@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using MADCA.Utility;
 
 namespace MADCA.Core.Data
@@ -156,6 +157,7 @@ namespace MADCA.Core.Data
             }
         }
 
+        public event Action<int> OffsetYChanged;
         public int OffsetXRaw { get; set; }
         private int _offsetY;
         public int OffsetY 
@@ -165,6 +167,7 @@ namespace MADCA.Core.Data
             {
                 _offsetY = value;
                 if (_offsetY < 0) { _offsetY = 0; }
+                OffsetYChanged?.Invoke(_offsetY);
             }
         }
 

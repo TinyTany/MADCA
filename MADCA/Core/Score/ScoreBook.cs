@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MADCA.Core.Data;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MADCA.Core.Score
@@ -41,5 +42,7 @@ namespace MADCA.Core.Score
             }
             return true;
         }
+
+        public TimingPosition Size => scores.Last().TimingEnd;
     }
 }

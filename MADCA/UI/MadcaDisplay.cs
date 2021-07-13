@@ -9,6 +9,7 @@ namespace MADCA.UI
     class MadcaDisplay
     {
         public PictureBox PictureBox { get; }
+        public VScrollBar VScrollBar { get; } = new VScrollBar();
         private readonly EditorLaneEnvironment editorLaneEnvironment;
         public IReadOnlyEditorLaneEnvironment EditorLaneEnvironment => editorLaneEnvironment;
         private readonly PreviewDisplayEnvironment previewDisplayEnvironment;
@@ -39,11 +40,31 @@ namespace MADCA.UI
 
         private void Initialize()
         {
+            VScrollBar.Height = PictureBox.Height;
+            VScrollBar.Location = new Point(previewDisplayEnvironment.DisplayRegion.X - VScrollBar.Width / 2, PictureBox.Top);
+            PictureBox.Controls.Add(VScrollBar);
+            VScrollBar.Value = VScrollBar.Maximum - EditorLaneEnvironment.OffsetY;
+
+            editorLaneEnvironment.OffsetYChanged += v =>
+            {
+                VScrollBar.Value = VScrollBar.Maximum - v;
+            };
+
+            VScrollBar.ValueChanged += (s, e) =>
+            {
+                editorLaneEnvironment.OffsetY = VScrollBar.Maximum - VScrollBar.Value;
+                previewDisplayEnvironment.TimingOffset = new TimingPosition(editorLaneEnvironment.TimingUnitHeight.ToUInt(), editorLaneEnvironment.OffsetY);
+                PictureBox.Refresh();
+            };
+
             PictureBox.SizeChanged += (s, e) =>
             {
                 var halfSize = new Size(PictureBox.Width / 2, PictureBox.Height);
                 editorLaneEnvironment.PanelRegion = new Rectangle(new Point(), halfSize);
                 previewDisplayEnvironment.DisplayRegion = new Rectangle(new Point(halfSize.Width, 0), halfSize);
+
+                VScrollBar.Height = PictureBox.Height;
+                VScrollBar.Location = new Point(previewDisplayEnvironment.DisplayRegion.X - VScrollBar.Width / 2, PictureBox.Top);
             };
 
             PictureBox.MouseWheel += (s, e) =>
