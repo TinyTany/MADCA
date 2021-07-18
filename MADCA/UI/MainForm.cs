@@ -109,6 +109,65 @@ namespace MADCA.UI
             };
             tscbBeat.SelectedIndex = 0;
 
+            #region ノーツサイズ設定用UI関連
+
+            var noteSizeUpDown = new NumericUpDown()
+            {
+                Font = new Font("Yu Gothic UI", 9),
+                Minimum = 1,
+                Maximum = MadcaEnv.LaneCount
+            };
+            noteSizeUpDown.ValueChanged += (s, e) =>
+            {
+                status.NoteSize = (int)noteSizeUpDown.Value;
+                tscbFavoriteNoteSize.SelectedIndex = -1;
+                display.PictureBox.Refresh();
+            };
+            var idx = toolStrip1.Items.IndexOf(tsbAddFavoriteSize);
+            toolStrip1.Items.Insert(idx, new ToolStripControlHost(noteSizeUpDown));
+
+            var favoriteSize = new List<int>();
+            tsbAddFavoriteSize.Click += (s, e) =>
+            {
+                var size = (int)noteSizeUpDown.Value;
+                if (!favoriteSize.Contains(size))
+                {
+                    favoriteSize.Add(size);
+                    tscbFavoriteNoteSize.Items.Clear();
+                    tscbFavoriteNoteSize.Items.AddRange(favoriteSize.OrderBy(n => n).Select(x => x.ToString()).ToArray());
+                }
+                tscbFavoriteNoteSize.SelectedItem = size.ToString();
+            };
+
+            tscbFavoriteNoteSize.SelectedIndexChanged += (s, e) =>
+            {
+                if (tscbFavoriteNoteSize.SelectedIndex == -1)
+                {
+                    return;
+                }
+                var selectedIndex = tscbFavoriteNoteSize.SelectedIndex;
+                var item = tscbFavoriteNoteSize.SelectedItem.ToString();
+                noteSizeUpDown.Value = int.Parse(item);
+                tscbFavoriteNoteSize.SelectedIndex = selectedIndex;
+            };
+
+            tsbDeleteFavoriteSize.Click += (s, e) =>
+            {
+                if (tscbFavoriteNoteSize.SelectedIndex == -1)
+                {
+                    return;
+                }
+                var item = tscbFavoriteNoteSize.SelectedItem.ToString();
+                favoriteSize.Remove(int.Parse(item));
+                var selectedIndex = tscbFavoriteNoteSize.SelectedIndex;
+                tscbFavoriteNoteSize.Items.RemoveAt(tscbFavoriteNoteSize.SelectedIndex);
+                tscbFavoriteNoteSize.SelectedIndex = selectedIndex < tscbFavoriteNoteSize.Items.Count ? selectedIndex : tscbFavoriteNoteSize.Items.Count - 1;
+            };
+
+            noteSizeUpDown.Value = status.NoteSize;
+
+            #endregion
+
 #if DEBUG
             var time = new Stopwatch();
             display.PictureBox.Paint += (s, e) => time.Restart();
@@ -266,6 +325,7 @@ namespace MADCA.UI
             {
                 if (visible)
                 {
+                    note.ReSize(new NoteSize(status.NoteSize));
                     note.SelectedNote = status.NoteMode.ToNoteType();
                     NoteDrawer.DrawToLane(e.Graphics, laneEnv, note);
                     NoteDrawer.DrawToPreview(e.Graphics, previewEnv, note);

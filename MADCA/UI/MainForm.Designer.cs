@@ -48,6 +48,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tslBeat = new System.Windows.Forms.ToolStripLabel();
             this.tscbBeat = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslNoteSize = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbTouch = new System.Windows.Forms.ToolStripButton();
             this.tsbChain = new System.Windows.Forms.ToolStripButton();
@@ -59,6 +61,9 @@
             this.tsbHoldStep = new System.Windows.Forms.ToolStripButton();
             this.tsbField = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddFavoriteSize = new System.Windows.Forms.ToolStripButton();
+            this.tscbFavoriteNoteSize = new System.Windows.Forms.ToolStripComboBox();
+            this.tsbDeleteFavoriteSize = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -114,7 +119,12 @@
             this.tsbDelete,
             this.toolStripSeparator3,
             this.tslBeat,
-            this.tscbBeat});
+            this.tscbBeat,
+            this.toolStripSeparator4,
+            this.tslNoteSize,
+            this.tsbAddFavoriteSize,
+            this.tscbFavoriteNoteSize,
+            this.tsbDeleteFavoriteSize});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1634, 25);
@@ -232,6 +242,17 @@
             this.tscbBeat.Name = "tscbBeat";
             this.tscbBeat.Size = new System.Drawing.Size(60, 23);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tslNoteSize
+            // 
+            this.tslNoteSize.Name = "tslNoteSize";
+            this.tslNoteSize.Size = new System.Drawing.Size(53, 22);
+            this.tslNoteSize.Text = "NoteSize";
+            // 
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -338,6 +359,35 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(86, 22);
             this.toolStripLabel1.Text = "toolStripLabel1";
             // 
+            // tsbAddFavoriteSize
+            // 
+            this.tsbAddFavoriteSize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbAddFavoriteSize.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddFavoriteSize.Image")));
+            this.tsbAddFavoriteSize.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddFavoriteSize.Name = "tsbAddFavoriteSize";
+            this.tsbAddFavoriteSize.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddFavoriteSize.Text = "→";
+            this.tsbAddFavoriteSize.ToolTipText = "選択中のサイズをお気に入りに追加します";
+            // 
+            // tscbFavoriteNoteSize
+            // 
+            this.tscbFavoriteNoteSize.AutoSize = false;
+            this.tscbFavoriteNoteSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tscbFavoriteNoteSize.DropDownWidth = 60;
+            this.tscbFavoriteNoteSize.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.tscbFavoriteNoteSize.Name = "tscbFavoriteNoteSize";
+            this.tscbFavoriteNoteSize.Size = new System.Drawing.Size(60, 23);
+            // 
+            // tsbDeleteFavoriteSize
+            // 
+            this.tsbDeleteFavoriteSize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbDeleteFavoriteSize.Image = ((System.Drawing.Image)(resources.GetObject("tsbDeleteFavoriteSize.Image")));
+            this.tsbDeleteFavoriteSize.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDeleteFavoriteSize.Name = "tsbDeleteFavoriteSize";
+            this.tsbDeleteFavoriteSize.Size = new System.Drawing.Size(35, 22);
+            this.tsbDeleteFavoriteSize.Text = "削除";
+            this.tsbDeleteFavoriteSize.ToolTipText = "選択中のサイズをお気に入りから削除します";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -392,5 +442,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripComboBox tscbBeat;
         private System.Windows.Forms.ToolStripLabel tslBeat;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripLabel tslNoteSize;
+        private System.Windows.Forms.ToolStripButton tsbAddFavoriteSize;
+        private System.Windows.Forms.ToolStripComboBox tscbFavoriteNoteSize;
+        private System.Windows.Forms.ToolStripButton tsbDeleteFavoriteSize;
     }
 }
