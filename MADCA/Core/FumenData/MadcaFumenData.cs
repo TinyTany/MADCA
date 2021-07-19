@@ -3,12 +3,12 @@ using MADCA.Core.Score;
 
 namespace MADCA.Core.FumenData
 {
-    enum FumenDifficulity
+    public enum FumenDifficulity
     {
         Normal, Hard, Expert, Inferno
     }
 
-    class MadcaFumenData
+    public class MadcaFumenData
     {
         public ScoreBook ScoreBook { get; } = new ScoreBook();
         public NoteBook NoteBook { get; } = new NoteBook();
@@ -42,7 +42,7 @@ namespace MADCA.Core.FumenData
         }
     }
 
-    class MadcaMusicData
+    public class MadcaMusicData
     {
         public string MusicName { get; } = "Music";
         public string MusicAuthor { get; } = "Author";
@@ -64,7 +64,7 @@ namespace MADCA.Core.FumenData
         }
     }
 
-    class FumenLevel
+    public class FumenLevel
     {
         public int Level { get; } = 1;
         public bool Plus { get; } = false;
