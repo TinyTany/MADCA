@@ -71,7 +71,7 @@
     <Compile Include="Core\Graphics\NoteDrawer.cs" />
     <Compile Include="Core\Graphics\PreviewDrawer.cs" />
     <Compile Include="Core\FumenData\MadcaFumenData.cs" />
-    <Compile Include="Core\IO\ScoreDataExchanger.cs" />
+    <Compile Include="Core\IO\FumenExchanger.cs" />
     <Compile Include="Core\MusicScore.cs" />
     <Compile Include="Core\Note\Abstract\HoldStepNote.cs" />
     <Compile Include="Core\Note\Abstract\ShortNote.cs" />
