@@ -2,10 +2,14 @@
 using MADCA.Core.Note.Abstract;
 using MADCA.Core.Note.Concrete;
 using MADCA.UI;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Utility
 {
-    static class MyUtil
+    public static class MyUtil
     {
         /// <summary>
         /// nullを返すことがあります
@@ -34,6 +38,45 @@ namespace MADCA.Utility
                 default:
                     //Debug.Assert(false);
                     return null;
+            }
+        }
+
+        public static void Normalize(JsonObject json)
+        {
+            foreach(var p in json.ToArray())
+            {
+                if (p.Value is JsonElement jElem)
+                {
+                    json[p.Key] = ParsePropertyValue(jElem);
+                }
+            }
+
+            dynamic ParsePropertyValue(JsonElement elem)
+            {
+                switch (elem.ValueKind)
+                {
+                    case JsonValueKind.Array:
+                        {
+                            return elem.EnumerateArray().Select(e => ParsePropertyValue(e)).ToList();
+                        }
+                    case JsonValueKind.Object:
+                        {
+                            return ExpandObject(elem);
+                        }
+                    default:
+                        {
+                            return elem.ToString();
+                        }
+                }
+            }
+
+            JsonObject ExpandObject(JsonElement elem)
+            {
+                return elem.EnumerateObject().Aggregate(new JsonObject(), (acc, cur) => 
+                {
+                    acc.Add(cur.Name, ParsePropertyValue(cur.Value));
+                    return acc;
+                });
             }
         }
     }

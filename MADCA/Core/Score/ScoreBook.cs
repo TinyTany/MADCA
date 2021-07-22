@@ -1,10 +1,13 @@
 ﻿using MADCA.Core.Data;
+using MADCA.Core.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.Score
 {
-    public sealed class ScoreBook
+    public sealed class ScoreBook : IExchangeable
     {
         private readonly List<Score> scores;
 
@@ -20,7 +23,7 @@ namespace MADCA.Core.Score
             if (scores.Contains(score)) { return false; }
             if (!scores.Any())
             {
-                score.TimingBegin = new Data.TimingPosition(1, 0);
+                score.TimingBegin = new TimingPosition(1, 0);
             }
             else
             {
@@ -38,11 +41,30 @@ namespace MADCA.Core.Score
             scores.Remove(score);
             foreach(var item in scores.Skip(index))
             {
-                item.TimingBegin -= new Data.TimingPosition(score.BeatDen, (int)score.BeatNum);
+                item.TimingBegin -= new TimingPosition(score.BeatDen, (int)score.BeatNum);
             }
             return true;
         }
 
         public TimingPosition Size => scores.Last().TimingEnd;
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["Scores"] = scores.Select(s => s.Exchange()).ToList()
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            scores.Clear();
+            foreach(var s in json["Scores"])
+            {
+                var tmp = new Score(1, 1);
+                tmp.Exchange(s);
+                scores.Add(tmp);
+            }
+        }
     }
 }

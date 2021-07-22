@@ -6,10 +6,10 @@ using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.IO
 {
-    public interface IExchangeable<T>
+    public interface IExchangeable
     {
-        T Exchange();
-        void Exchange(T t);
+        JsonObject Exchange();
+        void Exchange(JsonObject json);
     }
 
     public abstract class Exchanger<T, U>

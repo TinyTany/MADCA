@@ -1,11 +1,13 @@
-﻿using MADCA.Utility;
+﻿using MADCA.Core.IO;
+using MADCA.Utility;
+using System.Collections.Generic;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.Data
 {
-    public class LanePotision
+    public class LanePotision : IExchangeable
     {
         public int RawLane { get; private set; }
-
         public int NormalizedLane
         {
             get
@@ -21,6 +23,19 @@ namespace MADCA.Core.Data
 
         public LanePotision (LanePotision other)
             : this(other.RawLane) { }
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["RawLane"] = RawLane
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            RawLane = int.Parse(json["RawLane"]);
+        }
     }
 
     public class Position

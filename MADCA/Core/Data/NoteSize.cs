@@ -1,8 +1,11 @@
-﻿using System;
+﻿using MADCA.Core.IO;
+using System;
+using System.Collections.Generic;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.Data
 {
-    public class NoteSize : IEquatable<NoteSize>
+    public class NoteSize : IEquatable<NoteSize>, IExchangeable
     {
         // NOTE: 取りうるノーツサイズ
         private const int min = 1, max = 60;
@@ -29,6 +32,19 @@ namespace MADCA.Core.Data
 
         public NoteSize(NoteSize other)
             : this(other.Size) { }
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["Size"] = Size
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            Size = int.Parse(json["Size"]);
+        }
 
         #region IEquatable実装と演算子オーバーロード
         public override bool Equals(object obj)

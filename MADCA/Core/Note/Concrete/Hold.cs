@@ -2,15 +2,17 @@
 using System.Linq;
 using MADCA.Core.Note.Abstract;
 using MADCA.Core.Data;
+using MADCA.Core.IO;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.Note.Concrete
 {
-    public sealed class Hold
+    public sealed class Hold : IExchangeable
     {
         private readonly List<HoldStepNote> stepNotes;
 
-        public HoldBegin HoldBegin { get; }
-        public HoldEnd HoldEnd { get; }
+        public HoldBegin HoldBegin { get; private set; }
+        public HoldEnd HoldEnd { get; private set; }
 
         public IReadOnlyList<HoldStepNote> StepNotes => stepNotes;
 
@@ -60,6 +62,12 @@ namespace MADCA.Core.Note.Concrete
             stepNotes = new List<HoldStepNote>();
         }
 
+        public Hold(JsonObject json)
+            : this(new LanePotision(0), new TimingPosition(1, 0), new TimingPosition(1, 1), new NoteSize(1))
+        {
+            Exchange(json);
+        }
+
         public bool Put(HoldStepNote note)
         {
             if (note is null) { return false; }
@@ -96,6 +104,28 @@ namespace MADCA.Core.Note.Concrete
             if (timing <= HoldBegin.Timing || timing >= HoldEnd.Timing) { return false; }
             if (stepNotes.Where(x => x.Timing == timing).Any()) { return false; }
             return true;
+        }
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["HoldBegin"] = HoldBegin.Exchange(),
+                ["HoldEnd"] = HoldEnd.Exchange(),
+                ["StepNotes"] = stepNotes.Select(s => s.Exchange()).ToList()
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            HoldBegin.Exchange(json["HoldBegin"]);
+            HoldEnd.Exchange(json["HoldEnd"]);
+            foreach(var step in json["StepNotes"])
+            {
+                var tmp = new HoldRelay(new LanePotision(0), new TimingPosition(1, 0), new NoteSize(1));
+                tmp.Exchange(step);
+                Put(tmp);
+            }
         }
     }
 }

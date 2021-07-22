@@ -1,5 +1,8 @@
-﻿using MADCA.Utility;
+﻿using MADCA.Core.IO;
+using MADCA.Utility;
 using System;
+using System.Collections.Generic;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.Core.Data
 {
@@ -7,7 +10,7 @@ namespace MADCA.Core.Data
     /// ノーツの時間位置を表現するクラス
     /// 実際はただの分数を表現するクラス
     /// </summary>
-    public sealed class TimingPosition : IEquatable<TimingPosition>, IComparable<TimingPosition>
+    public sealed class TimingPosition : IEquatable<TimingPosition>, IComparable<TimingPosition>, IExchangeable
     {
         /// <summary>
         /// 小節の分割数
@@ -16,7 +19,6 @@ namespace MADCA.Core.Data
 
         /// <summary>
         /// divValueによる分割単位の個数
-        /// [0, divValue)
         /// </summary>
         public int CntValue { get; private set; }
 
@@ -44,6 +46,7 @@ namespace MADCA.Core.Data
 
         public TimingPosition(uint div, int cnt)
         {
+            System.Diagnostics.Debug.Assert(div != 0, "分母が0です");
             DivValue = div;
             CntValue = cnt;
             Normalize();
@@ -62,6 +65,22 @@ namespace MADCA.Core.Data
             if (gcd == 0) { return; }
             DivValue /= gcd;
             CntValue /= (int)gcd;
+        }
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["CntValue"] = CntValue,
+                ["DivValue"] = DivValue
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            CntValue = int.Parse(json["CntValue"]);
+            DivValue = uint.Parse(json["DivValue"]);
+            Normalize();
         }
 
         #region 加減算オペレーターオーバーロード

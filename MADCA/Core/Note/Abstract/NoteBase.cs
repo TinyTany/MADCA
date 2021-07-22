@@ -1,6 +1,9 @@
 ﻿using MADCA.Core.Data;
 using System.Drawing;
 using MADCA.Utility;
+using MADCA.Core.IO;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
+using System;
 
 namespace MADCA.Core.Note.Abstract
 {
@@ -19,7 +22,7 @@ namespace MADCA.Core.Note.Abstract
         Preview
     }
 
-    public abstract class NoteBase
+    public abstract class NoteBase : IExchangeable
     {
         public virtual NoteType NoteType => NoteType.Unknown;
 
@@ -57,6 +60,24 @@ namespace MADCA.Core.Note.Abstract
             int width = NoteEnvironment.NoteWidth(NoteSize.Size, env);
             int height = NoteEnvironment.NoteHeight;
             return new Rectangle(loc.X, loc.Y - NoteEnvironment.NoteHeight / 2, width, height);
+        }
+
+        public JsonObject Exchange()
+        {
+            return new JsonObject()
+            {
+                ["NoteType"] = NoteType,
+                ["LanePosition"] = Lane.Exchange(),
+                ["TimingPosition"] = Timing.Exchange(),
+                ["NoteSize"] = NoteSize.Exchange()
+            };
+        }
+
+        public void Exchange(JsonObject json)
+        {
+            Lane.Exchange(json["LanePosition"]);
+            Timing.Exchange(json["TimingPosition"]);
+            NoteSize.Exchange(json["NoteSize"]);
         }
     }
 }

@@ -11,8 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
+using JsonObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
 namespace MADCA.UI
 {
@@ -81,7 +84,118 @@ namespace MADCA.UI
             tsbHoldStep.Click += (s, e) => SetNoteMode(NoteMode.HoldRelay, status);
             tsbField.Click += (s, e) => SetNoteMode(NoteMode.Field, status);
 
-            // 分数指定用ComboBoxの設定
+            #region ToolStripMenuItemの設定
+
+            tsmiOpen.Click += (s, e) =>
+            {
+                using(var dialog = new OpenFileDialog()
+                {
+                    Filter = "MADCA譜面ファイル(*.mdc)|*.mdc",
+                    Title = "開く"
+                })
+                {
+                    var result = dialog.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        string jsonString = default;
+                        try
+                        {
+                            jsonString = File.ReadAllText(dialog.FileName);
+
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show(
+                                    "譜面ファイルの読み取りに失敗しました。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            return;
+                        }
+                        try
+                        {
+                            var fumenInput = JsonSerializer.Deserialize<JsonObject>(jsonString, new JsonSerializerOptions());
+                            if (fumenInput == null)
+                            {
+                                MessageBox.Show(
+                                    "譜面データのデシリアライズに失敗しました。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    MyUtil.Normalize(fumenInput);
+                                    fumen.Exchange(fumenInput);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show(
+                                    "譜面データの読み込みに失敗しました。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show(
+                                    "譜面データのデシリアライズに失敗しました。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            };
+
+            tsmiSaveAs.Click += (s, e) =>
+            {
+                using(var dialog = new SaveFileDialog() 
+                { 
+                    FileName = "NewScore.mdc",
+                    Filter = "MADCA譜面ファイル(*.mdc)|*.mdc",
+                    Title = "名前を付けて保存"
+                })
+                {
+                    var result = dialog.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        string jsonString = default;
+                        try
+                        {
+                            jsonString = JsonSerializer.Serialize(fumen.Exchange(), new JsonSerializerOptions
+                            {
+                                WriteIndented = true
+                            });
+                            try
+                            {
+                                File.WriteAllText(dialog.FileName, jsonString);
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show(
+                                    "譜面データの書き込みに失敗しました。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("譜面データのシリアライズに失敗しました。");
+                        }
+                    }
+                }
+            };
+
+            #endregion
+
+            #region 分数指定用ComboBoxの設定
+
             var beatStride = new List<uint>() { 4, 8, 12, 16, 24, 32, 48, 64 };
             tscbBeat.Items.AddRange(beatStride.Select(x => $"1 / {x}").ToArray());
             tscbBeat.Items.Add("カスタム...");
@@ -108,6 +222,8 @@ namespace MADCA.UI
                 status.BeatStride = new TimingPosition(beatStride[tscbBeat.SelectedIndex], 1);
             };
             tscbBeat.SelectedIndex = 0;
+
+            #endregion
 
             #region ノーツサイズ設定用UI関連
 
